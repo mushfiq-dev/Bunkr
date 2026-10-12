@@ -1,0 +1,6 @@
+{
+  "name": "Bunkr — University Attendance & Academic Dashboard",
+  "description": "Cozy dark mode academic companion for 14-week university routines, Bangladesh public holidays, 70% skip buffer attendance tracker, and passbar forecaster.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,19 @@
+{
+  "id": "/",
+  "name": "Bunkr Academic Companion",
+  "short_name": "Bunkr",
+  "description": "Cozy dark mode university attendance tracker, 14-week routine, and passbar forecaster.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#121316",
+  "theme_color": "#121316",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
