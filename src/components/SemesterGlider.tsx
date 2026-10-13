@@ -727,8 +727,9 @@ export const SemesterGlider: React.FC<SemesterGliderProps> = ({
       {/* MODAL 1: LAB CUSTOM EXAMS & MARKS MODAL */}
       {/* ======================================================== */}
       {editingLabCourse && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="w-full max-w-xl my-6 rounded-2xl bg-[#16171E] border border-amber-500/30 p-5 sm:p-6 shadow-2xl text-neutral-200 space-y-4 relative">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm px-3 py-4 sm:p-6 overscroll-contain">
+          <div className="min-h-full flex items-start justify-center pt-2 sm:pt-6 pb-12 sm:pb-16">
+            <div className="w-full max-w-xl rounded-2xl bg-[#16171E] border border-amber-500/30 p-4 sm:p-6 shadow-2xl text-neutral-200 space-y-4 relative">
             
             {/* Modal Header */}
             <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
@@ -943,6 +944,7 @@ export const SemesterGlider: React.FC<SemesterGliderProps> = ({
             })()}
 
           </div>
+          </div>
         </div>
       )}
 
@@ -950,8 +952,9 @@ export const SemesterGlider: React.FC<SemesterGliderProps> = ({
       {/* MODAL 2: THEORY COURSE MARKS INPUT MODAL */}
       {/* ======================================================== */}
       {editingTheoryCourse && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="w-full max-w-lg my-6 rounded-2xl bg-[#16171E] border border-amber-500/30 p-5 sm:p-6 shadow-2xl text-neutral-200 space-y-4 relative">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm px-3 py-4 sm:p-6 overscroll-contain">
+          <div className="min-h-full flex items-start justify-center pt-2 sm:pt-6 pb-12 sm:pb-16">
+            <div className="w-full max-w-lg rounded-2xl bg-[#16171E] border border-amber-500/30 p-4 sm:p-6 shadow-2xl text-neutral-200 space-y-4 relative">
             
             <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
               <div className="flex items-center gap-2">
@@ -1106,6 +1109,7 @@ export const SemesterGlider: React.FC<SemesterGliderProps> = ({
               </button>
             </div>
 
+          </div>
           </div>
         </div>
       )}

@@ -35,7 +35,7 @@ export const DEFAULT_ROUTINE_CONFIG: RoutineConfig = {
   classesEndDate: getInitialClassesEnd(),
   totalWeeks: 14,
   weeklySchedule: DEFAULT_REAL_WEEKLY_ROUTINE,
-  adminPin: '1234',
+  adminPin: '0451',
   semesterName: 'Year 1, Semester 1 (14 Weeks)',
   selectedSemesterKey: 'y1s1',
 };
@@ -91,13 +91,20 @@ class IndexedDBStorage {
         const req = store.get('main_config');
         req.onsuccess = () => {
           if (req.result) {
-            resolve(req.result);
+            const conf = req.result;
+            if (!conf.adminPin || conf.adminPin === '1234') {
+              conf.adminPin = '0451';
+            }
+            resolve(conf);
           } else {
             // Check fallback in localStorage
             const local = localStorage.getItem('ember_routine_config');
             if (local) {
               try {
                 const parsed = JSON.parse(local);
+                if (!parsed.adminPin || parsed.adminPin === '1234') {
+                  parsed.adminPin = '0451';
+                }
                 resolve(parsed);
                 return;
               } catch (_) {}

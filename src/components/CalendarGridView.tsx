@@ -246,8 +246,9 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
 
       {/* Date Inspection Drawer / Modal */}
       {selectedDay && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-2xl bg-[#18191E] border border-amber-900/50 p-6 shadow-2xl text-neutral-200">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm px-3 py-4 sm:p-6 overscroll-contain">
+          <div className="min-h-full flex items-start justify-center pt-2 sm:pt-6 pb-12 sm:pb-16">
+            <div className="w-full max-w-md rounded-2xl bg-[#18191E] border border-amber-900/50 p-5 sm:p-6 shadow-2xl text-neutral-200">
             {/* Header */}
             <div className="flex items-start justify-between pb-3 border-b border-neutral-800">
               <div>
@@ -352,6 +353,7 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
                 Close
               </button>
             </div>
+          </div>
           </div>
         </div>
       )}

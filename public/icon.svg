@@ -4,61 +4,60 @@
   
   <!-- Subtle ambient ember glow -->
   <defs>
-    <radialGradient id="bunkrGlow" cx="50%" cy="45%" r="50%">
-      <stop offset="0%" stop-color="#E85A14" stop-opacity="0.25"/>
+    <radialGradient id="bunkrGlow" cx="50%" cy="42%" r="50%">
+      <stop offset="0%" stop-color="#E85A14" stop-opacity="0.3"/>
       <stop offset="60%" stop-color="#E85A14" stop-opacity="0.08"/>
       <stop offset="100%" stop-color="#121316" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <circle cx="256" cy="230" r="220" fill="url(#bunkrGlow)"/>
+  <circle cx="256" cy="220" r="230" fill="url(#bunkrGlow)"/>
 
-  <!-- Scaled Emblem: Vortex & Radiant Star in Brand Orange -->
-  <g transform="translate(76, 50) scale(2.25)">
-    <!-- Outer Vortex Crescent Arm -->
+  <!-- Centered Vortex Emblem (Scaled & Centered at 256, 205) -->
+  <g transform="translate(106, 55) scale(2.5)">
+    <!-- 1. Outer Swirling Vortex Crescent -->
     <path
-      d="M 126 54 
-         C 134 76, 126 102, 106 118 
-         C 86 134, 58 134, 38 120 
-         C 18 106, 12 80, 20 58 
-         C 28 36, 48 22, 72 20 
-         C 92 18, 114 26, 122 42 
-         C 126 50, 122 56, 114 54 
-         C 106 52, 98 42, 86 38 
-         C 68 32, 48 40, 40 56 
-         C 32 72, 38 92, 52 102 
-         C 66 112, 86 112, 100 100 
-         C 112 90, 116 74, 112 60 
-         C 110 52, 116 46, 122 48 
-         C 126 50, 126 52, 126 54 Z"
+      d="M 95 38 
+         C 107 55, 107 75, 95 92 
+         C 80 110, 52 114, 30 100 
+         C 12 88, 6 64, 14 42 
+         C 22 22, 44 8, 68 8 
+         C 86 8, 102 18, 110 32 
+         C 112 36, 108 40, 102 38 
+         C 94 36, 88 28, 76 24 
+         C 58 18, 38 28, 30 44 
+         C 22 60, 28 80, 42 90 
+         C 58 100, 78 98, 90 86 
+         C 100 74, 102 58, 96 44 
+         C 94 38, 98 34, 102 36 Z"
       fill="#E85A14"
     />
 
-    <!-- Secondary Swoosh Curve -->
+    <!-- 2. Secondary dynamic vortex swoosh highlight -->
     <path
-      d="M 62 20 
-         C 90 18, 120 30, 128 58 
-         C 132 72, 128 86, 120 98 
-         C 118 96, 120 86, 118 76 
-         C 116 60, 106 44, 92 34 
-         C 80 26, 68 22, 54 22 
-         C 48 22, 56 20, 62 20 Z"
-      fill="#E85A14"
+      d="M 52 10 
+         C 78 8, 104 20, 112 42 
+         C 114 46, 110 50, 104 48 
+         C 96 46, 88 34, 76 26 
+         C 66 20, 54 18, 44 18 
+         C 40 18, 46 12, 52 10 Z"
+      fill="#FF7A30"
+      opacity="0.85"
     />
 
-    <!-- Concentric Orbit Ring -->
-    <circle cx="72" cy="72" r="28" stroke="#E85A14" stroke-width="2.2" stroke-opacity="0.9"/>
+    <!-- 3. Central Thin Orbit Ring -->
+    <circle cx="60" cy="60" r="23" stroke="#E85A14" stroke-width="2.2" stroke-opacity="0.85"/>
 
-    <!-- Crosshair Lines -->
-    <line x1="72" y1="32" x2="72" y2="112" stroke="#E85A14" stroke-width="1.8" stroke-opacity="0.8"/>
-    <line x1="32" y1="72" x2="112" y2="72" stroke="#E85A14" stroke-width="1.8" stroke-opacity="0.8"/>
+    <!-- 4. Crosshairs -->
+    <line x1="60" y1="26" x2="60" y2="94" stroke="#E85A14" stroke-width="1.8" stroke-opacity="0.8"/>
+    <line x1="26" y1="60" x2="94" y2="60" stroke="#E85A14" stroke-width="1.8" stroke-opacity="0.8"/>
 
-    <!-- Radiant 4-Point Compass Star -->
-    <polygon points="72,36 76,66 108,72 76,78 72,108 68,78 36,72 68,66" fill="#E85A14"/>
-    <polygon points="72,52 77,67 92,72 77,77 72,92 67,77 52,72 67,67" fill="#E85A14" opacity="0.95"/>
-    <polygon points="72,46 74,70 98,72 74,74 72,98 70,74 46,72 70,70" fill="#FF7A30" opacity="0.7"/>
-    <circle cx="72" cy="72" r="3.5" fill="#FFA468"/>
+    <!-- 5. Radiant 4-Point Compass Star -->
+    <polygon points="60,28 64,55 92,60 64,65 60,92 56,65 28,60 56,55" fill="#E85A14"/>
+    <polygon points="60,44 64,56 76,60 64,64 60,76 56,64 44,60 56,56" fill="#E85A14" opacity="0.95"/>
+    <polygon points="60,38 62,58 82,60 62,62 60,82 58,62 38,60 58,58" fill="#FF7A30" opacity="0.65"/>
+    <circle cx="60" cy="60" r="3.2" fill="#FFA468"/>
   </g>
 
-  <!-- Gothic Bunkr Wordmark at bottom -->
-  <text x="256" y="440" text-anchor="middle" font-family="'UnifrakturMaguntia', 'Pirata One', serif" font-size="76" font-weight="bold" fill="#E85A14">Bunkr</text>
+  <!-- Centered Bold Brutalist (BUNKR) Wordmark -->
+  <text x="256" y="445" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="76" font-weight="900" letter-spacing="-2px" fill="#E85A14">(BUNKR)</text>
 </svg>

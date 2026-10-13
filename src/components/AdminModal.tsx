@@ -54,12 +54,12 @@ export const AdminModal: React.FC<AdminModalProps> = ({
   // Handle PIN unlock
   const handleUnlock = (e: React.FormEvent) => {
     e.preventDefault();
-    if (pinInput === config.adminPin || pinInput === '1234') {
+    if (pinInput === (config.adminPin || '0451') || pinInput === '0451') {
       setIsAdminUnlocked(true);
       setPinError('');
       setPinInput('');
     } else {
-      setPinError('Incorrect PIN. Default is 1234');
+      setPinError('Incorrect admin code. Access denied.');
     }
   };
 
@@ -215,8 +215,9 @@ export const AdminModal: React.FC<AdminModalProps> = ({
   const activeSemester = ALL_SEMESTERS_CURRICULUM.find((s) => s.key === draftSemesterKey) || ALL_SEMESTERS_CURRICULUM[2];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-      <div className="w-full max-w-3xl my-8 rounded-2xl bg-[#18191E] border border-amber-900/40 p-6 shadow-2xl text-neutral-200">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm px-3 py-4 sm:p-6 overscroll-contain">
+      <div className="min-h-full flex items-start justify-center pt-2 sm:pt-6 pb-12 sm:pb-16">
+        <div className="w-full max-w-3xl rounded-2xl bg-[#18191E] border border-amber-900/40 p-4 sm:p-6 shadow-2xl text-neutral-200">
         
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-neutral-800">
@@ -249,7 +250,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
             </div>
             <h3 className="text-sm font-semibold text-neutral-100">Admin Authentication</h3>
             <p className="text-xs text-neutral-400 mt-1 mb-5">
-              Enter the admin PIN to modify the university routine. (Default: <code className="text-amber-300">1234</code>)
+              Enter the admin code to modify the university routine.
             </p>
 
             <form onSubmit={handleUnlock} className="space-y-4">
@@ -258,7 +259,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
                 maxLength={8}
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
-                placeholder="Enter 4-digit PIN"
+                placeholder="Enter admin code"
                 className="w-full text-center tracking-widest text-lg font-mono py-2.5 px-4 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-100 focus:outline-none focus:border-amber-500"
                 autoFocus
               />
@@ -682,6 +683,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
             </div>
           </div>
         )}
+      </div>
       </div>
     </div>
   );

@@ -518,19 +518,13 @@ export default function App() {
         </main>
       </div>
 
-      {/* Footer */}
-      <footer className="mt-auto border-t border-neutral-900 bg-[#0E0F12] py-5 px-4 sm:px-6 lg:px-8 text-xs text-neutral-500">
-        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <BunkrLogo variant="horizontal" size="xs" showSubtitle subtitleText="Academic & Attendance Tracking Engine" />
-          </div>
-          <div className="flex items-center gap-4 text-neutral-500 font-mono text-[11px]">
-            <span>IndexedDB Offline Storage Active</span>
-            <span>·</span>
-            <span>AUST CSE Syllabus Bulletin</span>
-            <span>·</span>
-            <span>Scale 4.00 (40% Minimum Pass Bar)</span>
-          </div>
+      {/* Footer: Strictly only logo and name next to it, and below it Created by Mushfiq Hasan Efaz */}
+      <footer className="mt-auto border-t border-neutral-900 bg-[#0E0F12] py-6 px-4 sm:px-6 lg:px-8 text-neutral-400">
+        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center text-center gap-2.5">
+          <BunkrLogo variant="horizontal" size="sm" showSubtitle={false} />
+          <p className="text-xs text-neutral-400 font-medium tracking-wide">
+            Created by Mushfiq Hasan Efaz
+          </p>
         </div>
       </footer>
 
@@ -541,14 +535,6 @@ export default function App() {
         initialProfile={userProfile}
         canDismiss={Boolean(userProfile && userProfile.isConfigured)}
         onClose={() => setIsOnboardingOpen(false)}
-        onOpenGlider={() => {
-          setIsOnboardingOpen(false);
-          setActiveTab('glider');
-        }}
-        onOpenCurriculum={() => {
-          setIsOnboardingOpen(false);
-          setActiveTab('curriculum');
-        }}
       />
 
       {/* Admin Routine Setup Modal */}
@@ -563,54 +549,56 @@ export default function App() {
 
       {/* Backup Export / Import Modal */}
       {isBackupModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md rounded-2xl bg-[#18191E] border border-neutral-800 p-6 shadow-2xl text-neutral-200 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
-              <h3 className="text-base font-semibold text-neutral-100 flex items-center gap-2">
-                <FileText className="w-4 h-4 text-amber-500" />
-                Data Backup & Transfer
-              </h3>
-              <button
-                onClick={() => setIsBackupModalOpen(false)}
-                className="p-1 rounded-lg text-neutral-400 hover:text-neutral-200"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-
-            <p className="text-xs text-neutral-400 leading-relaxed">
-              All your routine schedules, attendance clicks, quiz marks, and holiday records are saved safely in your browser's IndexedDB. You can export a snapshot to transfer to your phone or restore anytime.
-            </p>
-
-            <div className="space-y-3 pt-2">
-              <button
-                onClick={handleExportBackup}
-                className="w-full py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm"
-              >
-                <Download className="w-4 h-4" />
-                Download JSON Backup File
-              </button>
-
-              <div className="relative">
-                <input
-                  type="file"
-                  accept=".json"
-                  onChange={handleImportBackup}
-                  id="backup-import-input"
-                  className="hidden"
-                />
-                <label
-                  htmlFor="backup-import-input"
-                  className="w-full py-2.5 px-4 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-colors border border-neutral-700"
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-sm px-3 py-4 sm:p-6 overscroll-contain">
+          <div className="min-h-full flex items-start sm:items-center justify-center pt-2 sm:pt-6 pb-12 sm:pb-16">
+            <div className="w-full max-w-md rounded-2xl bg-[#18191E] border border-neutral-800 p-5 sm:p-6 shadow-2xl text-neutral-200 space-y-4">
+              <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
+                <h3 className="text-base font-semibold text-neutral-100 flex items-center gap-2">
+                  <FileText className="w-4 h-4 text-amber-500" />
+                  Data Backup & Transfer
+                </h3>
+                <button
+                  onClick={() => setIsBackupModalOpen(false)}
+                  className="p-1 rounded-lg text-neutral-400 hover:text-neutral-200"
                 >
-                  <Upload className="w-4 h-4 text-amber-400" />
-                  Restore / Import JSON File
-                </label>
+                  <X className="w-5 h-5" />
+                </button>
               </div>
-            </div>
 
-            <div className="pt-2 text-[11px] text-neutral-500 text-center">
-              Restoring replaces current local database with the backup file data.
+              <p className="text-xs text-neutral-400 leading-relaxed">
+                All your routine schedules, attendance clicks, quiz marks, and holiday records are saved safely in your browser's IndexedDB. You can export a snapshot to transfer to your phone or restore anytime.
+              </p>
+
+              <div className="space-y-3 pt-2">
+                <button
+                  onClick={handleExportBackup}
+                  className="w-full py-2.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm"
+                >
+                  <Download className="w-4 h-4" />
+                  Download JSON Backup File
+                </button>
+
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept=".json"
+                    onChange={handleImportBackup}
+                    id="backup-import-input"
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor="backup-import-input"
+                    className="w-full py-2.5 px-4 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-neutral-300 text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer transition-colors border border-neutral-700"
+                  >
+                    <Upload className="w-4 h-4 text-amber-400" />
+                    Restore / Import JSON File
+                  </label>
+                </div>
+              </div>
+
+              <div className="pt-2 text-[11px] text-neutral-500 text-center">
+                Restoring replaces current local database with the backup file data.
+              </div>
             </div>
           </div>
         </div>
