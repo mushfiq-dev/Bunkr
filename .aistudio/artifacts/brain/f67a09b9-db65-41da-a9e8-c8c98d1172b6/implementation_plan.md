@@ -1,149 +1,105 @@
-# EmberStudies — Cozy Dark University Academic & Attendance Companion
+# Bunkr: PWA Modernization, SPA Fallback Routing & Mobile Touch Shield
 
-EmberStudies is a web-based university academic tracking dashboard designed with a relaxing, warm "bonfire dark mode" aesthetic. It empowers university students and administrators to manage class schedules across a 14-week semester, track day-to-day course attendance with a 3-state interactive grid, monitor strict 70% attendance requirements with an automatic "Skip Buffer" calculator, forecast final exam passmarks from quizzes and midterms, and work completely offline via IndexedDB and PWA capabilities.
-
----
+Comprehensive implementation plan to replace the legacy manual service worker with `vite-plugin-pwa` for automated asset-hash precaching, configure static SPA routing fallbacks for direct URLs across hosting providers, and add touch-movement detection to prevent accidental attendance state changes while scrolling on mobile devices.
 
 ### User Review & Critical Decisions
 
 > [!IMPORTANT]
-> The following architectural and UX choices have been aligned based on your feedback:
+> The following decisions were confirmed during requirements clarification:
+> - **Accidental Mobile Taps Prevention**: Touch-movement detection algorithm. Taps on attendance boxes are cancelled if the user's finger moves more than 8 pixels or if scrolling activity is detected, preserving instant single-tap responsiveness while eliminating accidental toggles during scrolling.
+> - **PWA Service Worker Update Behavior**: Auto-update immediately in the background (`registerType: 'autoUpdate'`), ensuring seamless offline cache updates without intrusive reload popups.
+> - **Static SPA Fallback Routing**: Multi-platform configuration supporting Vercel (`vercel.json`) and Netlify (`_redirects` / `public/_redirects`), routing all direct route paths back to `index.html`.
 
-- **Confirmed Offline Storage Engine**: High-performance client-side **IndexedDB** with offline PWA installability, ensuring student attendance, routine changes, and forecaster grades are preserved on device without requiring server dependencies.
-- **Confirmed Admin vs. Student Separation**: Secure **Admin PIN modal** in the top navigation bar (default `1234`, customizable by the admin) to configure the semester routine (Saturday through Friday), semester start date, and holiday exceptions, keeping the primary view streamlined for students.
-- **Confirmed Bangladesh Holidays**: Pre-populated official **Bangladesh National Holidays** (e.g., Shaheed Day / International Mother Language Day Feb 21, Independence Day Mar 26, Eid-ul-Fitr, Pohela Boishakh Apr 14, May Day, Eid-ul-Adha, National Mourning Day Aug 15, Durga Puja, Victory Day Dec 16) with administrative overrides to add university-specific recesses or study breaks.
-- **Grading & Passbar Forecaster**: Implements the university continuous evaluation formula: 3 quizzes (10 marks each) taking the **best 2 of 3** (max 20) + Midterm (max 20) = **40 continuous assessment marks**. Subtracted against 40/100 university passing threshold to calculate the exact target score required out of 50 in the Final Exam.
+- **Confirmed Decision 1**: Touch-movement thresholding over long-press to preserve fast single-tap efficiency without scroll interruption.
+- **Confirmed Decision 2**: Modernized workbox precaching via `vite-plugin-pwa` replacing static `sw.js` with full support for Vite's content-hashed production bundles.
+- **Confirmed Decision 3**: Multi-platform SPA fallback routing rules preventing 404s on hard refreshes.
 
 ---
 
 ### 1. Overview & Core Concept
 
-- **What It Does**:
-  1. **Dynamic Routine Setup (Admin)**: Weekly schedule editor (Saturday to Friday) where courses are defined per day. The system calculates weekly frequencies and projects a 14-week semester schedule starting from a chosen date.
-  2. **The Visual Calendar Grid**: 14-week visual calendar showcasing class days, Bangladesh public holidays, off-days, and semester milestones with day-inspection drawers.
-  3. **The Attendance Tracker (The Grid)**: Interactive clickable attendance matrix cycling through **Blank (Neutral Slate)** ➔ **Attended (Emerald Green)** ➔ **Skipped (Crimson Red)** ➔ **Blank**.
-  4. **The Math (70% Skip Buffer)**: Computes total course sessions ($14 \times \text{weekly classes}$), minimum required attendances ($\lceil 0.70 \times \text{Total} \rceil$), current attendance percentage, and the live **Skip Buffer** (exact count of future classes the student can skip without dropping below 70%).
-  5. **The Passbar Forecaster**: Strategic grade simulator calculating best 2 of 3 quizzes + midterm, displaying current points secured out of 40 and target marks needed in the 50-mark final exam to pass or reach higher letter grades.
-- **Target Persona**: Bangladeshi and international university students wanting stress-free, accurate tracking of attendance regulations and exam safety margins.
-- **Atmosphere & Tone**: Cozy dark mode with glowing campfire embers, deep charcoal surfaces, soft amber indicators, and smooth micro-interactions.
+- **What It Does**: Upgrades Bunkr's progressive web app infrastructure to dynamically track Vite asset hashes for bulletproof offline reliability; provides native host rewrites for Vercel and Netlify to allow direct route refreshes; and adds a touch shield to attendance grid cells so students can scroll through 14 weeks on smartphones without accidentally changing attendance records.
+- **Target Audience / Persona**: University students tracking complex 14-week class routines, public holiday schedules, and 70% attendance buffers on mobile phones and laptops in both connected and offline environments.
+- **Key Value**: Guarantees zero corrupted attendance data from mobile thumb-scrolling, eliminates blank 404 screens on direct links or page reloads, and provides automated, zero-maintenance offline caching across app updates.
 
 ---
 
 ### 2. User Experience & Visual Design
 
-#### A. Aesthetic Direction & Palette (Cozy Bonfire Dark Mode)
-- **Neutral Canvas (60%)**: Deep obsidian and warm charcoal slate (`#121316` base canvas, `#18191E` elevated cards, `#23252E` active panels).
-- **Structural Surfaces (30%)**: Hairline borders (`rgba(245, 158, 11, 0.12)` subtle amber sheen) with warm text hierarchy (`#F3F4F6` primary text, `#9CA3AF` body text, `#6B7280` muted metadata).
-- **Accent Embers (10%)**:
-  - *Warm Amber & Flame*: `#F59E0B` and `#D97706` for highlights, primary badges, and calendar markers.
-  - *Attended State*: Emerald moss `#10B981` with subtle soft glow.
-  - *Skipped State*: Crimson ruby `#EF4444` with subtle warm halo.
-  - *Blank / Neutral*: Charcoal slate `#374151` with soft hover tint.
+- **Key User Flows**:
+  - *Mobile Scrolling Flow*: A student rapidly flicks or drags down through the 14-week routine on Android/iOS. Finger contact with class cells scrolls smoothly without toggling attendance. When the student lifts and deliberately taps a cell without dragging, the box instantly cycles between Blank, Attended (Green Checkmark), and Skipped (Red Cross).
+  - *Offline Launch Flow*: A student opens Bunkr in airplane mode or with poor campus connectivity. The service worker serves cached HTML, CSS, JavaScript, icons, and web fonts immediately with zero latency.
+  - *Direct URL Refresh Flow*: A student bookmarks or refreshes a sub-path or deep link on Vercel or Netlify; the static host rewrites the request to `index.html`, which immediately bootstraps the client application.
 
-#### B. Typography & Visual Hierarchy
-- **Display & Headings**: `Plus Jakarta Sans` / modern geometric sans for title clarity.
-- **Tabular Figures & Metrics**: `font-mono tabular-nums` for attendance counts, percentages, and exam mark calculations.
-- **Zero-Pill Restraint**: Metadata rendered with clean unboxed text and dot separators (`14 Weeks · 42 Sessions Total · 3 Remaining Skips`).
+- **Visual Identity & Theme**:
+  - *Aesthetic Direction*: Dark academia with cozy midnight tones, warm amber accents, and crisp gothic typography.
+  - *Color Palette & Mood*: Deep obsidian base (`#121316`), elevated card surface (`#16171D` / `#18191E`), warm amber highlights (`#F59E0B`), attendance success emerald (`#10B981`), and skip danger rose (`#F43F5E`).
+  - *Typography & Hierarchy*: Bold Gothic UnifrakturMaguntia display wordmark, JetBrains Mono for course codes, dates, and buffer percentages, and Plus Jakarta Sans for UI labels.
+  - *Component Styling & Layout*: Clean hairline borders (`border-neutral-800`), rounded containers (`rounded-xl`), and tactile button states with active press feedback.
 
-#### C. Core User Flows
-1. **Student Daily View**:
-   - Arrives at today's date in the visual calendar grid.
-   - Courses for today are prominently listed with current status.
-   - Student taps course box to cycle: Blank ➔ Attended (Green) ➔ Skipped (Red).
-   - "Skip Buffer" cards update in real time with visual safety gauges (Safe, Caution, Critical).
-2. **Passbar Forecaster Tab**:
-   - Select course ➔ Enter Quiz 1, 2, 3 and Midterm marks.
-   - Best 2 quizzes auto-highlighted; subtotal out of 40 instantly displays.
-   - Passbar visualizes the exact score needed out of 50 in the Final Exam to pass (40 total) and shows targets for letter grades (A+, A, B, etc.).
-3. **Admin Configuration Modal**:
-   - Accessed via PIN authentication (`1234`) in the top bar.
-   - Intuitive day-by-day course chip manager (Saturday to Friday).
-   - Date picker for semester kickoff date; holiday toggle list with Bangladesh public holiday defaults.
+- **Interactive Feedback & Motion**:
+  - Class cells provide subtle active scale reduction (`active:scale-95`) only on valid, stationary taps.
+  - Dragged touches provide continuous scroll inertia without registering button activation states.
 
 ---
 
 ### 3. Key Product Decisions & Trade-Offs
 
-- **Decision 1: Client-Side IndexedDB Storage over Server Backend**
-  - *Approach*: Leverage native browser IndexedDB wrapped with an async storage helper, alongside local JSON export/import for backups.
-  - *Rationale*: Guarantees zero latency, zero server downtime, full privacy, and 100% offline access when on campus or commuting.
-- **Decision 2: Skip Buffer Math Formulation**
-  - *Total Course Classes*: $T = 14 \times W_{\text{classes}}$ (adjusted for national holidays if class falls on an off-day).
-  - *Required Attendance*: $A_{\text{req}} = \lceil 0.70 \times T \rceil$.
-  - *Max Allowable Skips*: $S_{\text{max}} = T - A_{\text{req}}$.
-  - *Current Skip Buffer*: $\max(0, S_{\text{max}} - S_{\text{taken}})$.
-  - *Warning States*: Green if Buffer $\ge 3$, Amber if Buffer is $1$–$2$, Red if Buffer is $0$ (must attend all remaining), Flashing Alert if already below threshold.
-- **Decision 3: PWA Compliance with Install Prompt**
-  - *Approach*: Web App Manifest, Service Worker caching, and an explicit in-app "Install App" button in the header that hides in standalone mode.
+- **Decision 1: Touch Movement Delta Detection vs. Long-Press**
+  - *Chosen Approach*: Record `clientX` / `clientY` on touch start; compute Euclidean distance during touch move; if delta $> 8\text{px}$ or duration $> 600\text{ms}$ with movement, flag gesture as a scroll and suppress the state toggle.
+  - *Why*: Long-press forces students to wait 350-500ms on every attendance check, slowing down bulk entry after class. Touch delta detection maintains instantaneous single-tap speed while completely preventing scroll misfires.
+  - *Alternatives Considered*: Long-press (too slow for rapid logging), double-tap (unintuitive for rapid multi-course marking).
+
+- **Decision 2: vite-plugin-pwa vs. Custom Handcrafted Service Worker**
+  - *Chosen Approach*: Adopt `vite-plugin-pwa` with `registerType: 'autoUpdate'`, Workbox asset precaching, and virtual register support.
+  - *Why*: Vite generates hashed filenames for JavaScript chunks and CSS (`assets/index-[hash].js`). Manual service workers hardcode static asset arrays that break immediately upon new builds. `vite-plugin-pwa` compiles the dynamic manifest at build time and precaches exact production bundles.
+  - *Alternatives Considered*: Custom build script to inject hashes into `sw.js` (fragile and prone to drift).
+
+- **Decision 3: Multi-Platform SPA Rewrites**
+  - *Chosen Approach*: Deliver both `vercel.json` rewrites and `public/_redirects` rules for Netlify and static hosting engines.
+  - *Why*: Guarantees hosting compatibility regardless of where the repository is cloned, deployed, or shared.
 
 ---
 
-### 4. Technical Architecture & Data Strategy
+### 4. Technical Architecture & Data Strategy *(Technical Reference)*
+
+- **Architecture & Component Diagram**:
 
 ```
-┌────────────────────────────────────────────────────────────────────────┐
-│                        Top Navigation Bar                              │
-│  [EmberStudies Wordmark] ─ [Grid | Attendance | Passbar | Holidays] ─  │
-│  [Install App (PWA)] ─ [Admin Mode (PIN)]                              │
-└───────────────────────────────────┬────────────────────────────────────┘
-                                    │
-    ┌───────────────────────────────┼───────────────────────────────┐
-    ▼                               ▼                               ▼
-┌──────────────────────┐  ┌──────────────────────┐  ┌──────────────────────┐
-│  Academic Grid View  │  │  Attendance Tracker  │  │  Passbar Forecaster  │
-│ 14-Week Calendar     │  │ 3-State Click Cycles │  │ Best 2 of 3 Quizzes  │
-│ Class session dots   │  │ Attended/Skipped/Nil │  │ Midterm (20) marks   │
-│ Bangladesh holidays  │  │ 70% Rate & Buffer    │  │ Final Exam Need (/50)│
-└──────────────────────┘  └──────────────────────┘  └──────────────────────┘
-    │                               │                               │
-    └───────────────────────────────┼───────────────────────────────┘
-                                    ▼
-┌────────────────────────────────────────────────────────────────────────┐
-│                Offline Persistence Layer (IndexedDB Engine)            │
-│  - RoutineConfig Store: Days (Sat-Fri), Courses, StartDate, 14 Weeks   │
-│  - AttendanceRecords Store: { date, courseId, status: attended|skipped}│
-│  - AssessmentMarks Store: { courseId, q1, q2, q3, mid }                │
-│  - HolidayExceptions Store: BD Public Holidays + Custom University Off │
-└────────────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Bunkr Web Application                    │
+└──────────────────────────────┬──────────────────────────────┘
+                               │
+       ┌───────────────────────┼───────────────────────┐
+       ▼                       ▼                       ▼
+┌──────────────┐       ┌──────────────┐       ┌─────────────────┐
+│ Vite-PWA     │       │ Attendance   │       │ SPA Fallback    │
+│ Service      │       │ Touch-Shield │       │ Routing Configs │
+│ Worker       │       │ Handler      │       │                 │
+└──────┬───────┘       └──────┬───────┘       └────────┬────────┘
+       │                      │                        │
+       ▼                      ▼                        ▼
+┌──────────────┐       ┌──────────────┐       ┌─────────────────┐
+│ Workbox      │       │ Touch Delta  │       │ Vercel Rewrites │
+│ Precache     │       │ Filter       │       │ & Netlify       │
+│ Hashes       │       │ (< 8px = Tap)│       │ _redirects      │
+└──────┬───────┘       └──────┬───────┘       └─────────────────┘
+       │                      │
+       ▼                      ▼
+┌──────────────┐       ┌──────────────┐
+│ Offline      │       │ Attendance   │
+│ Cache & IDB  │       │ State Cycle  │
+│ Storage      │       │ (Next Status)│
+└──────────────┘       └──────────────┘
 ```
 
-#### Data Entities:
-```typescript
-interface CourseSchedule {
-  courseCode: string;
-  courseTitle?: string;
-  dayOfWeek: 'saturday' | 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday';
-  timeSlot?: string;
-}
+- **Data Model & State**:
+  - `TouchTracker`: Records `startX`, `startY`, `startTime`, and `isScrolling` flag per interaction.
+  - `AttendanceRecord`: Stores `{ status: 'attended' | 'skipped' | 'unmarked', timestamp: string }` mapped by `${date}_${courseCode}`.
+  - `PWA Manifest`: Standardized standalone manifest with icon definitions, name, and theme tokens.
 
-interface RoutineConfig {
-  semesterStartDate: string; // YYYY-MM-DD
-  totalWeeks: number; // default 14
-  weeklySchedule: Record<DayOfWeek, string[]>; // day -> array of course codes
-  adminPin: string;
-}
-
-interface AttendanceRecord {
-  date: string; // YYYY-MM-DD
-  courseCode: string;
-  status: 'attended' | 'skipped'; // blank is omitted or 'unmarked'
-}
-
-interface CourseAssessment {
-  courseCode: string;
-  quiz1?: number; // 0-10
-  quiz2?: number; // 0-10
-  quiz3?: number; // 0-10
-  midterm?: number; // 0-20
-}
-```
-
----
-
-### 5. Verification Plan
-
-1. **Build & Bundle Verification**: Execute `compile_applet` to ensure zero TypeScript errors or missing modules.
-2. **PWA Installability & Service Worker Check**: Validate Web App Manifest metadata and offline service worker caching.
-3. **Routine & Grid Generation**: Confirm 14-week generation accurately starts from user-selected date, maps Saturday–Friday correctly, and factors Bangladesh public holidays.
-4. **Attendance 3-State Cycling & Skip Buffer Math**: Verify clicking cycles Blank ➔ Attended ➔ Skipped ➔ Blank and calculates $70\%$ requirements and future buffer accurately.
-5. **Passbar Calculations**: Test best 2 of 3 quizzes logic (e.g. scores 8, 9, 6 takes 8 + 9 = 17) + midterm (e.g. 15) = 32 out of 40, requiring 8 marks out of 50 to pass (40 total passing line).
+- **Interactive Component & State Mapping**:
+  - `AttendanceGrid`: Wraps each course toggle button with touch delta tracking (`onTouchStart`, `onTouchMove`, `onTouchEnd`, `onClick`).
+  - `vite.config.ts`: Configured with `VitePWA` specifying manifest metadata, automatic registration, and workbox glob patterns.
+  - `vercel.json` & `public/_redirects`: Declares `/* -> /index.html 200` rewrite rules.
+  - `tsconfig.json`: Adds `vite-plugin-pwa/client` type reference for clean compilation.

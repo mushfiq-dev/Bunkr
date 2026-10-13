@@ -26,6 +26,7 @@ import {
   calculateCourseAttendanceSummary,
   formatDateToKey,
 } from '../services/academicMath';
+import { useTouchGuard } from '../hooks/useTouchGuard';
 
 interface AttendanceGridProps {
   config: RoutineConfig;
@@ -44,6 +45,7 @@ export const AttendanceGrid: React.FC<AttendanceGridProps> = ({
 }) => {
   const [selectedCourseFilter, setSelectedCourseFilter] = useState<string>('ALL');
   const [selectedWeekFilter, setSelectedWeekFilter] = useState<number | 'ALL'>('ALL');
+  const { touchProps, guardClick } = useTouchGuard();
 
   const uniqueCourses = getUniqueCourses(config.weeklySchedule);
   const todayKey = formatDateToKey(new Date());
@@ -404,13 +406,14 @@ export const AttendanceGrid: React.FC<AttendanceGridProps> = ({
                               <button
                                 key={course}
                                 type="button"
-                                onClick={() => onToggleAttendance(day.date, course)}
-                                className={`w-full py-1 px-1.5 rounded-md flex items-center justify-between text-left font-mono text-[11px] transition-all cursor-pointer ${
+                                {...touchProps}
+                                onClick={guardClick(() => onToggleAttendance(day.date, course))}
+                                className={`w-full py-1 px-1.5 rounded-md flex items-center justify-between text-left font-mono text-[11px] transition-all cursor-pointer select-none touch-manipulation ${
                                   status === 'attended'
-                                    ? 'bg-emerald-600 text-white font-semibold shadow-xs hover:bg-emerald-500'
+                                    ? 'bg-emerald-600 text-white font-semibold shadow-xs hover:bg-emerald-500 active:scale-[0.98]'
                                     : status === 'skipped'
-                                    ? 'bg-rose-600 text-white font-semibold shadow-xs hover:bg-rose-500'
-                                    : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700/80 border border-neutral-700/80'
+                                    ? 'bg-rose-600 text-white font-semibold shadow-xs hover:bg-rose-500 active:scale-[0.98]'
+                                    : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700/80 active:scale-[0.98] border border-neutral-700/80'
                                 }`}
                                 title={`${course} on ${day.date} — Currently: ${status}. Click to change to ${getNextStatusLabel(status)}`}
                               >

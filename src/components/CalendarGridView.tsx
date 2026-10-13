@@ -20,6 +20,7 @@ import {
   DAY_NAMES,
 } from '../types';
 import { getCourseCredits } from '../data/curriculum';
+import { useTouchGuard } from '../hooks/useTouchGuard';
 
 interface CalendarGridViewProps {
   calendarDays: CalendarDayInfo[];
@@ -36,6 +37,7 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
 }) => {
   const [selectedDay, setSelectedDay] = useState<CalendarDayInfo | null>(null);
   const [activeWeekIndex, setActiveWeekIndex] = useState<number | 'ALL'>('ALL');
+  const { touchProps, guardClick } = useTouchGuard();
 
   // Group days by month or display as full 14-week schedule
   const totalWeeks = config.totalWeeks;
@@ -160,7 +162,8 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
                   return (
                     <div
                       key={day.date}
-                      onClick={() => setSelectedDay(day)}
+                      {...touchProps}
+                      onClick={guardClick(() => setSelectedDay(day))}
                       className={`p-3 rounded-xl border text-left cursor-pointer transition-all hover:scale-[1.02] flex flex-col justify-between min-h-[120px] ${
                         isSelected
                           ? 'ring-2 ring-amber-500 bg-neutral-900 border-amber-500'
@@ -324,8 +327,9 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
 
                         {/* Direct 3-State Toggle button */}
                         <button
-                          onClick={() => onToggleAttendance(selectedDay.date, course)}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all ${
+                          {...touchProps}
+                          onClick={guardClick(() => onToggleAttendance(selectedDay.date, course))}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-all select-none touch-manipulation active:scale-[0.98] ${
                             status === 'attended'
                               ? 'bg-emerald-600 text-white'
                               : status === 'skipped'
