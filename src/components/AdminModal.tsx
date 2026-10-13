@@ -217,7 +217,7 @@ export const AdminModal: React.FC<AdminModalProps> = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-sm px-3 py-4 sm:p-6 overscroll-contain">
       <div className="min-h-full flex items-start justify-center pt-2 sm:pt-6 pb-12 sm:pb-16">
-        <div className="w-full max-w-3xl rounded-2xl bg-[#18191E] border border-amber-900/40 p-4 sm:p-6 shadow-2xl text-neutral-200">
+        <div className="w-full max-w-3xl rounded-2xl bg-[#18191E] border border-amber-900/40 p-4 sm:p-6 shadow-2xl text-neutral-200 [&_input]:select-text [&_textarea]:select-text">
         
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-neutral-800">

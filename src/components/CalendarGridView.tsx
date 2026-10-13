@@ -60,7 +60,7 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
     <div className="space-y-6">
       
       {/* Visual Grid Top Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl bg-[#16171D] border border-neutral-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 sm:p-6 rounded-3xl bg-[#161720] border border-neutral-800">
         <div>
           <h2 className="text-base font-semibold text-neutral-100 flex items-center gap-2">
             <CalendarIcon className="w-4 h-4 text-amber-500" />
@@ -132,18 +132,18 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
       </div>
 
       {/* Week-by-Week Visual Calendar Cards */}
-      <div className="space-y-4">
+      <div className="space-y-6">
         {visibleWeeks.map((weekNum) => {
           const days = weekGroups.get(weekNum) || [];
 
           return (
             <div
               key={weekNum}
-              className="p-4 rounded-xl bg-[#16171D] border border-neutral-800/90 space-y-3"
+              className="p-5 sm:p-7 rounded-3xl bg-[#161720] border border-neutral-800/90 space-y-4"
             >
               {/* Header */}
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold font-mono text-amber-400">
+                <span className="text-sm font-bold font-mono text-amber-400">
                   WEEK {weekNum} of {totalWeeks}
                 </span>
                 <span className="text-xs text-neutral-500 font-mono">
@@ -152,7 +152,7 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
               </div>
 
               {/* Day Grid */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-2.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-3.5">
                 {days.map((day) => {
                   const hasHoliday = !!day.holiday;
                   const isClassDay = day.courses.length > 0;

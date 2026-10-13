@@ -91,7 +91,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Academic Status Card */}
-        <div className="p-2.5 rounded-xl bg-neutral-900/90 border border-neutral-800 space-y-1.5 text-xs">
+        <div className="p-3.5 rounded-2xl bg-neutral-900/90 border border-neutral-800 space-y-2 text-xs shadow-sm">
           <div className="flex items-center justify-between font-mono">
             <span className="text-neutral-400 text-[11px]">Academic Term</span>
             <span className="font-bold text-amber-300">
@@ -103,7 +103,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <span className="text-neutral-300 truncate max-w-[150px]">CSE (AUST)</span>
           </div>
           {cumulativeCGPA !== undefined && cumulativeCGPA > 0 && (
-            <div className="flex items-center justify-between pt-1 border-t border-neutral-800 text-[11px] font-mono">
+            <div className="flex items-center justify-between pt-1.5 border-t border-neutral-800/80 text-[11px] font-mono">
               <span className="text-neutral-400">Cumulative CGPA</span>
               <span className="font-bold text-emerald-400">{cumulativeCGPA.toFixed(2)} / 4.00</span>
             </div>
@@ -149,14 +149,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
           </button>
 
           {/* Degree Credits Progress Card */}
-          <div className="p-2.5 rounded-xl bg-neutral-900/60 border border-neutral-800 space-y-1.5">
+          <div className="p-3.5 rounded-2xl bg-neutral-900/60 border border-neutral-800 space-y-2 shadow-sm">
             <div className="flex items-center justify-between text-[11px] font-mono">
-              <span className="text-neutral-400 text-[10px]">Degree Progress</span>
+              <span className="text-neutral-400 text-[10px] uppercase tracking-wider">Degree Progress</span>
               <span className="text-amber-300 font-bold text-[11px]">
                 {completedCreditsSoFar.toFixed(2)} / {totalDegreeCredits} Cr
               </span>
             </div>
-            <div className="w-full h-1.5 rounded-full bg-neutral-800 overflow-hidden">
+            <div className="w-full h-2 rounded-full bg-neutral-800 overflow-hidden">
               <div
                 className="bg-gradient-to-r from-amber-500 to-orange-500 h-full rounded-full transition-all"
                 style={{
@@ -201,25 +201,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <ChevronRight className="w-3.5 h-3.5 text-neutral-500 shrink-0" />
           </button>
 
-          {/* Glider Archive Info Card (Just like Curriculum's Progress Card) */}
-          <div className="p-2.5 rounded-xl bg-neutral-900/60 border border-neutral-800 space-y-1.5">
-            <div className="flex items-center justify-between text-[11px] font-mono">
-              <span className="text-neutral-400 text-[10px]">Archive Structure</span>
-              <span className="text-amber-300 font-bold text-[11px]">
-                1.1 – 4.2 Semesters
-              </span>
-            </div>
-            <div className="flex items-center justify-between text-[10px] text-neutral-400 font-mono">
-              <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-                Theory First
-              </span>
-              <span className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                Custom Lab Marks
-              </span>
-            </div>
-          </div>
         </div>
 
         {/* 4. Holidays (BD Holidays & Off-Days) */}

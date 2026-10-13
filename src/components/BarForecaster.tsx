@@ -305,10 +305,10 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       
       {/* 1. Header & Course Selection Banner */}
-      <div className="p-4 sm:p-5 rounded-2xl bg-[#16171D] border border-neutral-800 space-y-4">
+      <div className="p-5 sm:p-7 rounded-3xl bg-[#161720] border border-neutral-800 space-y-5">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2">

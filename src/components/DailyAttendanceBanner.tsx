@@ -69,22 +69,22 @@ export const DailyAttendanceBanner: React.FC<DailyAttendanceBannerProps> = ({
   });
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#17181F] via-[#1B1917] to-[#17181F] border border-amber-900/50 p-4 sm:p-5 shadow-xl transition-all">
-      {/* Subtle ember glow background */}
-      <div className="absolute top-0 right-0 -mr-16 -mt-16 w-56 h-56 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
+    <div className="relative overflow-hidden rounded-3xl bg-[#161720] border border-neutral-800 p-6 sm:p-8 shadow-xl transition-all">
+      {/* Subtle ambient ember glow */}
+      <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
 
-      <div className="relative z-10 space-y-3.5">
+      <div className="relative z-10 space-y-6">
         
-        {/* Top Header: Title, Device Date & Summary Counter Pills */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0">
+        {/* Top Header: Title, Device Date & Summary Counter Pod */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shrink-0 shadow-inner">
               <CalendarDays className="w-5 h-5 text-amber-400" />
             </div>
 
             <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-sm sm:text-base font-bold text-neutral-100 tracking-tight">
+              <div className="flex items-center gap-2.5">
+                <h2 className="text-base sm:text-lg font-bold text-neutral-100 tracking-tight">
                   Daily Attendance Fast-Log
                 </h2>
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" title="Live Attendance Log" />
@@ -95,20 +95,20 @@ export const DailyAttendanceBanner: React.FC<DailyAttendanceBannerProps> = ({
             </div>
           </div>
 
-          {/* Clean Alignment: Stats Pill & Quick Grid Link */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <div className="px-3 py-1.5 rounded-xl bg-neutral-900/90 border border-neutral-800 text-xs font-mono flex items-center gap-2.5">
-              <span className="text-emerald-400 font-semibold" title="Attended">✓ {attendedCount}</span>
-              <span className="text-neutral-700">|</span>
-              <span className="text-rose-400 font-semibold" title="Skipped">✕ {skippedCount}</span>
-              <span className="text-neutral-700">|</span>
-              <span className="text-neutral-400" title="Unmarked">○ {unmarkedCount}</span>
+          {/* Clean Alignment: Stats Pod & Quick Grid Link */}
+          <div className="flex items-center gap-2.5 flex-wrap">
+            <div className="px-3.5 py-2 rounded-2xl bg-neutral-900/90 border border-neutral-800 text-xs font-mono flex items-center gap-3">
+              <span className="text-emerald-400 font-semibold" title="Attended">✓ {attendedCount} Attended</span>
+              <span className="text-neutral-700">·</span>
+              <span className="text-rose-400 font-semibold" title="Skipped">✕ {skippedCount} Skipped</span>
+              <span className="text-neutral-700">·</span>
+              <span className="text-neutral-400" title="Unmarked">○ {unmarkedCount} Blank</span>
             </div>
 
             {onOpenAttendanceTab && (
               <button
                 onClick={onOpenAttendanceTab}
-                className="px-3 py-1.5 rounded-xl bg-neutral-900/80 border border-neutral-800 hover:border-amber-500/40 text-xs text-neutral-400 hover:text-amber-300 transition-colors font-mono flex items-center gap-1.5 shrink-0"
+                className="px-3.5 py-2 rounded-2xl bg-neutral-900/80 border border-neutral-800 hover:border-amber-500/40 text-xs text-neutral-400 hover:text-amber-300 transition-colors font-mono flex items-center gap-1.5 shrink-0 cursor-pointer"
                 title="View full 14-week matrix grid"
               >
                 <span>14-Wk Grid</span>
@@ -201,7 +201,7 @@ export const DailyAttendanceBanner: React.FC<DailyAttendanceBannerProps> = ({
               </div>
 
               {/* Perfectly Aligned Responsive Grid of Course Cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 sm:gap-4">
                 {scheduledCourses.map((course) => {
                   const key = `${todayKey}_${course}`;
                   const record = attendanceRecords[key];
@@ -211,7 +211,7 @@ export const DailyAttendanceBanner: React.FC<DailyAttendanceBannerProps> = ({
                     <button
                       key={course}
                       onClick={() => onToggleAttendance(todayKey, course)}
-                      className={`h-[88px] p-3 rounded-xl border transition-all text-left flex flex-col justify-between shadow-sm cursor-pointer select-none ${
+                      className={`min-h-[105px] p-4 sm:p-4.5 rounded-2xl border transition-all text-left flex flex-col justify-between shadow-sm cursor-pointer select-none hover:scale-[1.01] ${
                         status === 'attended'
                           ? 'bg-emerald-950/60 border-emerald-500/80 text-emerald-100 hover:border-emerald-400 shadow-emerald-950/40'
                           : status === 'skipped'
@@ -221,27 +221,27 @@ export const DailyAttendanceBanner: React.FC<DailyAttendanceBannerProps> = ({
                       title={`Click to cycle attendance for ${course} on ${todayKey} (Currently: ${status})`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-mono font-bold text-sm tracking-wide">
+                        <span className="font-mono font-bold text-sm sm:text-base tracking-wide text-neutral-100">
                           {course}
                         </span>
                         {status === 'attended' && (
-                          <div className="w-5 h-5 rounded-full bg-emerald-500 text-neutral-950 flex items-center justify-center font-bold">
+                          <div className="w-5.5 h-5.5 rounded-full bg-emerald-500 text-neutral-950 flex items-center justify-center font-bold">
                             <Check className="w-3.5 h-3.5" />
                           </div>
                         )}
                         {status === 'skipped' && (
-                          <div className="w-5 h-5 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold">
+                          <div className="w-5.5 h-5.5 rounded-full bg-rose-500 text-white flex items-center justify-center font-bold">
                             <X className="w-3.5 h-3.5" />
                           </div>
                         )}
                         {status === 'unmarked' && (
-                          <div className="w-5 h-5 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center text-neutral-500">
+                          <div className="w-5.5 h-5.5 rounded-full bg-neutral-800 border border-neutral-700 flex items-center justify-center text-neutral-500">
                             <Circle className="w-3 h-3" />
                           </div>
                         )}
                       </div>
 
-                      <div className="flex items-center justify-between text-[11px] font-mono">
+                      <div className="flex items-center justify-between text-xs font-mono pt-1">
                         <span
                           className={
                             status === 'attended'
@@ -257,7 +257,7 @@ export const DailyAttendanceBanner: React.FC<DailyAttendanceBannerProps> = ({
                             ? 'Skipped'
                             : 'Unmarked'}
                         </span>
-                        <span className="text-[10px] text-neutral-500">
+                        <span className="text-[11px] text-neutral-500">
                           {status === 'attended' ? '✓ Logged' : status === 'skipped' ? '✕ Logged' : 'Tap to log'}
                         </span>
                       </div>

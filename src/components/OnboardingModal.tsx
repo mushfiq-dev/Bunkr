@@ -60,7 +60,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/85 backdrop-blur-md px-3 py-4 sm:p-6 overscroll-contain">
       {/* Viewport Safe Wrapper: items-start prevents any negative Y clipping on Android phones */}
       <div className="min-h-full flex items-start justify-center pt-2 sm:pt-6 pb-12 sm:pb-16">
-        <div className="w-full max-w-md rounded-2xl sm:rounded-3xl bg-[#16171E] border border-amber-500/30 p-4 sm:p-6 shadow-2xl text-neutral-200 space-y-4 relative">
+        <div className="w-full max-w-md rounded-2xl sm:rounded-3xl bg-[#16171E] border border-amber-500/30 p-4 sm:p-6 shadow-2xl text-neutral-200 space-y-4 relative [&_input]:select-text [&_textarea]:select-text">
           
           {/* Subtle glow */}
           <div className="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
@@ -91,7 +91,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                   if (error) setError('');
                 }}
                 placeholder=""
-                className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-neutral-700 text-sm text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-amber-500"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-neutral-700 text-sm text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-amber-500 select-text"
               />
             </div>
 
@@ -110,7 +110,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                   if (error) setError('');
                 }}
                 placeholder=""
-                className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-neutral-700 text-sm text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-amber-500 font-mono"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-neutral-900 border border-neutral-700 text-sm text-neutral-100 placeholder-neutral-500 focus:outline-none focus:border-amber-500 font-mono select-text"
               />
             </div>
 

@@ -7,6 +7,7 @@ interface BunkrLogoProps {
   subtitleText?: string;
   className?: string;
   glow?: boolean;
+  svgClass?: string;
 }
 
 /**
@@ -22,14 +23,15 @@ export const BunkrLogo: React.FC<BunkrLogoProps> = ({
   subtitleText = '',
   className = '',
   glow = true,
+  svgClass,
 }) => {
   // Proportional icon dimensions
   const iconSizes = {
     xs: 'w-5 h-5',
     sm: 'w-7 h-7',
-    md: 'w-9 h-9 sm:w-10 sm:h-10',
-    lg: 'w-20 h-20 sm:w-26 sm:h-26',
-    xl: 'w-28 h-28 sm:w-34 sm:h-34',
+    md: 'w-11 h-11 sm:w-12 sm:h-12',
+    lg: 'w-20 h-20 sm:w-24 sm:h-24',
+    xl: 'w-28 h-28 sm:w-32 sm:h-32',
   };
 
   // Proportional wordmark heights
@@ -214,7 +216,7 @@ export const BunkrLogo: React.FC<BunkrLogoProps> = ({
   if (variant === 'icon') {
     return (
       <div className={`inline-flex items-center justify-center ${className}`}>
-        <EmblemSVG />
+        <EmblemSVG svgClass={svgClass} />
       </div>
     );
   }

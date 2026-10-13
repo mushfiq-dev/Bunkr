@@ -14,7 +14,7 @@ export default defineConfig(() => {
         includeAssets: ['icon.svg', 'manifest.json'],
         manifest: {
           id: '/',
-          name: 'Bunkr Academic Companion',
+          name: 'Bunkr',
           short_name: 'Bunkr',
           description: 'Cozy dark mode university attendance tracker, 14-week routine, and passbar forecaster.',
           theme_color: '#121316',

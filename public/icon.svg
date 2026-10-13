@@ -4,17 +4,17 @@
   
   <!-- Subtle ambient ember glow -->
   <defs>
-    <radialGradient id="bunkrGlow" cx="50%" cy="42%" r="50%">
-      <stop offset="0%" stop-color="#E85A14" stop-opacity="0.3"/>
-      <stop offset="60%" stop-color="#E85A14" stop-opacity="0.08"/>
+    <radialGradient id="bunkrGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#E85A14" stop-opacity="0.38"/>
+      <stop offset="55%" stop-color="#E85A14" stop-opacity="0.12"/>
       <stop offset="100%" stop-color="#121316" stop-opacity="0"/>
     </radialGradient>
   </defs>
-  <circle cx="256" cy="220" r="230" fill="url(#bunkrGlow)"/>
+  <circle cx="256" cy="256" r="230" fill="url(#bunkrGlow)"/>
 
-  <!-- Centered Vortex Emblem (Scaled & Centered at 256, 205) -->
-  <g transform="translate(106, 55) scale(2.5)">
-    <!-- 1. Outer Swirling Vortex Crescent -->
+  <!-- Centered Vortex Emblem (Scaled & Centered at (256, 256) like GitHub / Facebook app icons) -->
+  <g transform="translate(86, 86) scale(2.833)">
+    <!-- 1. Outer Swirling Vortex Crescent (Counter-clockwise upper vortex sweep) -->
     <path
       d="M 95 38 
          C 107 55, 107 75, 95 92 
@@ -32,7 +32,28 @@
       fill="#E85A14"
     />
 
-    <!-- 2. Secondary dynamic vortex swoosh highlight -->
+    <!-- Symmetrical Counter Swirl (180deg matching 1.jpg) -->
+    <g transform="rotate(180 60 60)">
+      <path
+        d="M 95 38 
+           C 107 55, 107 75, 95 92 
+           C 80 110, 52 114, 30 100 
+           C 12 88, 6 64, 14 42 
+           C 22 22, 44 8, 68 8 
+           C 86 8, 102 18, 110 32 
+           C 112 36, 108 40, 102 38 
+           C 94 36, 88 28, 76 24 
+           C 58 18, 38 28, 30 44 
+           C 22 60, 28 80, 42 90 
+           C 58 100, 78 98, 90 86 
+           C 100 74, 102 58, 96 44 
+           C 94 38, 98 34, 102 36 Z"
+        fill="#E85A14"
+        opacity="0.95"
+      />
+    </g>
+
+    <!-- 2. Dynamic vortex swoosh highlight -->
     <path
       d="M 52 10 
          C 78 8, 104 20, 112 42 
@@ -51,13 +72,10 @@
     <line x1="60" y1="26" x2="60" y2="94" stroke="#E85A14" stroke-width="1.8" stroke-opacity="0.8"/>
     <line x1="26" y1="60" x2="94" y2="60" stroke="#E85A14" stroke-width="1.8" stroke-opacity="0.8"/>
 
-    <!-- 5. Radiant 4-Point Compass Star -->
+    <!-- 5. Radiant Compass Star -->
     <polygon points="60,28 64,55 92,60 64,65 60,92 56,65 28,60 56,55" fill="#E85A14"/>
     <polygon points="60,44 64,56 76,60 64,64 60,76 56,64 44,60 56,56" fill="#E85A14" opacity="0.95"/>
     <polygon points="60,38 62,58 82,60 62,62 60,82 58,62 38,60 58,58" fill="#FF7A30" opacity="0.65"/>
     <circle cx="60" cy="60" r="3.2" fill="#FFA468"/>
   </g>
-
-  <!-- Centered Bold Brutalist (BUNKR) Wordmark -->
-  <text x="256" y="445" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="76" font-weight="900" letter-spacing="-2px" fill="#E85A14">(BUNKR)</text>
 </svg>

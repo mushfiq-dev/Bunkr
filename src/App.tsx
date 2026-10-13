@@ -340,7 +340,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#121316] text-[#F3F4F6] flex flex-col font-sans selection:bg-amber-600/30 selection:text-amber-200">
+    <div className="min-h-screen bg-[#121316] text-[#F3F4F6] flex flex-col font-sans selection:bg-amber-600/30 selection:text-amber-200 select-none pb-[env(safe-area-inset-bottom)]">
       
       {/* Top Bar Navigation */}
       <Navbar
@@ -355,7 +355,7 @@ export default function App() {
       />
 
       {/* Main Layout: Desktop Sidebar + Main Content Area */}
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-5 flex gap-6">
+      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-11 flex flex-col lg:flex-row gap-8 lg:gap-12 pb-[env(safe-area-inset-bottom)]">
         
         {/* Left Sidebar with Profile, Curriculum, Semester Glider, BD Holidays */}
         <Sidebar
@@ -378,34 +378,37 @@ export default function App() {
         />
 
         {/* Right Main Dashboard Area */}
-        <main className="flex-1 min-w-0 space-y-6">
+        <main className="flex-1 min-w-0 space-y-10 sm:space-y-12">
           
-          {/* Daily Attendance Fast-Log Section - Right below top bar as requested */}
-          <DailyAttendanceBanner
-            config={config}
-            calendarDays={calendarDays}
-            attendanceRecords={attendanceRecords}
-            onToggleAttendance={handleToggleAttendance}
-            onOpenAttendanceTab={() => setActiveTab('attendance')}
-            onOpenAdmin={() => setIsAdminModalOpen(true)}
-          />
+          {/* Daily Attendance Fast-Log Section - Shown on Attendance Tab */}
+          {activeTab === 'attendance' && (
+            <DailyAttendanceBanner
+              config={config}
+              calendarDays={calendarDays}
+              attendanceRecords={attendanceRecords}
+              onToggleAttendance={handleToggleAttendance}
+              onOpenAttendanceTab={() => setActiveTab('attendance')}
+              onOpenAdmin={() => setIsAdminModalOpen(true)}
+            />
+          )}
 
-          {/* Academic Semester Info Banner */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#181920] via-[#1E1B18] to-[#181920] border border-amber-950/60 p-4 sm:p-5 shadow-xl">
-            <div className="absolute top-0 right-0 -mr-16 -mt-16 w-60 h-60 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
+          {/* Academic Semester Info Banner - Spacious, Clean, Refined Typography */}
+          <div className="relative overflow-hidden rounded-3xl bg-[#161720] border border-neutral-800 p-6 sm:p-8 shadow-xl">
+            <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
 
-            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-3">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2.5">
-                  <BunkrLogo variant="icon" size="sm" />
-                  <h1 className="text-lg sm:text-xl font-bold tracking-tight text-neutral-100">
-                    {config.semesterName || 'Academic Semester (14 Weeks)'}
-                  </h1>
+            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="space-y-2">
+                <div className="flex items-center gap-2.5 text-[11px] font-mono font-semibold uppercase tracking-wider text-amber-400/90">
+                  <BunkrLogo variant="icon" size="xs" />
+                  <span>Academic Companion Dashboard</span>
                 </div>
-                <p className="text-xs text-neutral-400 max-w-xl">
+                <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-100">
+                  {config.semesterName || 'Academic Semester (14 Weeks)'}
+                </h1>
+                <p className="text-xs sm:text-sm text-neutral-400 max-w-2xl leading-relaxed">
                   {userProfile?.name ? (
                     <span>
-                      Enrolled: <strong className="text-neutral-200">{userProfile.name}</strong> ({userProfile.roll}) · Year {userProfile.year}, Sem {userProfile.semester} ({currentSemesterCurriculum.shortLabel}) · 70% Skip Buffer Active
+                      Enrolled: <strong className="text-neutral-200 font-semibold">{userProfile.name}</strong> ({userProfile.roll}) · Year {userProfile.year}, Sem {userProfile.semester} ({currentSemesterCurriculum.shortLabel}) · 70% Skip Buffer Active
                     </span>
                   ) : (
                     <span>
@@ -415,25 +418,25 @@ export default function App() {
                 </p>
               </div>
 
-              {/* Quick Summary Pills */}
-              <div className="flex items-center gap-2 shrink-0 text-xs flex-wrap font-mono">
-                <div className="px-3 py-1.5 rounded-xl bg-neutral-900/80 border border-neutral-800 text-neutral-300">
-                  <span className="text-neutral-500 text-[10px] block">Start Date</span>
-                  <span className="font-semibold text-amber-300">{config.semesterStartDate}</span>
+              {/* Quick Summary Pods */}
+              <div className="flex items-center gap-2.5 shrink-0 text-xs flex-wrap font-mono">
+                <div className="px-3.5 py-2 rounded-2xl bg-neutral-900/90 border border-neutral-800 text-neutral-300">
+                  <span className="text-neutral-500 text-[10px] uppercase font-mono tracking-wider block">Start Date</span>
+                  <span className="font-bold text-xs sm:text-sm text-amber-300 block mt-0.5">{config.semesterStartDate}</span>
                 </div>
                 {config.classesEndDate && (
-                  <div className="px-3 py-1.5 rounded-xl bg-neutral-900/80 border border-neutral-800 text-neutral-300">
-                    <span className="text-neutral-500 text-[10px] block">Classes End</span>
-                    <span className="font-semibold text-neutral-200">{config.classesEndDate}</span>
+                  <div className="px-3.5 py-2 rounded-2xl bg-neutral-900/90 border border-neutral-800 text-neutral-300">
+                    <span className="text-neutral-500 text-[10px] uppercase font-mono tracking-wider block">Classes End</span>
+                    <span className="font-bold text-xs sm:text-sm text-neutral-200 block mt-0.5">{config.classesEndDate}</span>
                   </div>
                 )}
-                <div className="px-3 py-1.5 rounded-xl bg-neutral-900/80 border border-neutral-800 text-neutral-300">
-                  <span className="text-neutral-500 text-[10px] block">Length</span>
-                  <span className="font-semibold text-neutral-200">{config.totalWeeks} Wks</span>
+                <div className="px-3.5 py-2 rounded-2xl bg-neutral-900/90 border border-neutral-800 text-neutral-300">
+                  <span className="text-neutral-500 text-[10px] uppercase font-mono tracking-wider block">Duration</span>
+                  <span className="font-bold text-xs sm:text-sm text-neutral-200 block mt-0.5">{config.totalWeeks} Weeks</span>
                 </div>
-                <div className="px-3 py-1.5 rounded-xl bg-neutral-900/80 border border-neutral-800 text-neutral-300">
-                  <span className="text-neutral-500 text-[10px] block">Courses</span>
-                  <span className="font-semibold text-amber-400">{uniqueCourses.length} Enrolled</span>
+                <div className="px-3.5 py-2 rounded-2xl bg-neutral-900/90 border border-neutral-800 text-neutral-300">
+                  <span className="text-neutral-500 text-[10px] uppercase font-mono tracking-wider block">Courses</span>
+                  <span className="font-bold text-xs sm:text-sm text-amber-400 block mt-0.5">{uniqueCourses.length} Enrolled</span>
                 </div>
               </div>
             </div>
@@ -519,7 +522,7 @@ export default function App() {
       </div>
 
       {/* Footer: Strictly only logo and name next to it, and below it Created by Mushfiq Hasan Efaz */}
-      <footer className="mt-auto border-t border-neutral-900 bg-[#0E0F12] py-6 px-4 sm:px-6 lg:px-8 text-neutral-400">
+      <footer className="mt-auto border-t border-neutral-900 bg-[#0E0F12] py-6 px-4 sm:px-6 lg:px-8 text-neutral-400 pb-[env(safe-area-inset-bottom)]">
         <div className="max-w-7xl mx-auto flex flex-col items-center justify-center text-center gap-2.5">
           <BunkrLogo variant="horizontal" size="sm" showSubtitle={false} />
           <p className="text-xs text-neutral-400 font-medium tracking-wide">
@@ -606,7 +609,7 @@ export default function App() {
 
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-900 border border-amber-500/40 text-amber-200 text-xs font-medium shadow-2xl backdrop-blur-md">
+        <div className="fixed bottom-6 right-6 pb-[env(safe-area-inset-bottom)] z-50 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-900 border border-amber-500/40 text-amber-200 text-xs font-medium shadow-2xl backdrop-blur-md">
           <Check className="w-4 h-4 text-amber-400" />
           <span>{toastMessage}</span>
         </div>
