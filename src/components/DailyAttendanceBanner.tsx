@@ -241,7 +241,7 @@ export const DailyAttendanceBanner: React.FC<DailyAttendanceBannerProps> = ({
                         )}
                       </div>
 
-                      <div className="flex items-center justify-between text-xs font-mono pt-1">
+                      <div className="flex flex-col items-start gap-0.5 text-[10px] sm:text-xs font-mono pt-1 mt-auto">
                         <span
                           className={
                             status === 'attended'

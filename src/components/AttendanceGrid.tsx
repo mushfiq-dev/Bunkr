@@ -339,7 +339,7 @@ export const AttendanceGrid: React.FC<AttendanceGridProps> = ({
                             : `${course} on ${day.date} — Currently: ${status}. Tap to switch to ${getNextStatusLabel(status)}`
                         }
                       >
-                        <span className="truncate">{course}</span>
+                        <span className="break-words text-wrap leading-tight text-center">{course}</span>
                         
                         <span className="text-xs sm:text-sm font-bold shrink-0 ml-1.5">
                           {status === 'attended' && '✓'}

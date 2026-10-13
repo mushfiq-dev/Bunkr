@@ -24,6 +24,8 @@ import {
   Edit3,
   Clock,
   Layers,
+  Github,
+  Mail,
 } from 'lucide-react';
 import {
   RoutineConfig,
@@ -340,7 +342,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#121316] text-[#F3F4F6] flex flex-col font-sans selection:bg-amber-600/30 selection:text-amber-200 select-none pb-[env(safe-area-inset-bottom)]">
+    <div className="min-h-screen lg:h-screen lg:overflow-hidden bg-[#121316] text-[#F3F4F6] flex flex-col font-sans selection:bg-amber-600/30 selection:text-amber-200 select-none pb-[env(safe-area-inset-bottom)]">
       
       {/* Top Bar Navigation */}
       <Navbar
@@ -355,7 +357,7 @@ export default function App() {
       />
 
       {/* Main Layout: Desktop Sidebar + Main Content Area */}
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-11 flex flex-col lg:flex-row gap-8 lg:gap-12 pb-[env(safe-area-inset-bottom)]">
+      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-11 flex flex-col lg:flex-row gap-8 lg:gap-12 pb-[env(safe-area-inset-bottom)] lg:overflow-hidden">
         
         {/* Left Sidebar with Profile, Curriculum, Semester Glider, BD Holidays */}
         <Sidebar
@@ -378,7 +380,7 @@ export default function App() {
         />
 
         {/* Right Main Dashboard Area */}
-        <main className="flex-1 min-w-0 space-y-10 sm:space-y-12">
+        <main className="flex-1 min-w-0 space-y-10 sm:space-y-12 lg:overflow-y-auto lg:h-full lg:pr-2 pb-24">
           
           {/* Daily Attendance Fast-Log Section - Shown on Attendance Tab */}
           {activeTab === 'attendance' && (
@@ -521,13 +523,22 @@ export default function App() {
         </main>
       </div>
 
-      {/* Footer: Strictly only logo and name next to it, and below it Created by Mushfiq Hasan Efaz */}
-      <footer className="mt-auto border-t border-neutral-900 bg-[#0E0F12] py-6 px-4 sm:px-6 lg:px-8 text-neutral-400 pb-[env(safe-area-inset-bottom)]">
-        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center text-center gap-2.5">
+      <footer className="mt-auto border-t border-neutral-900 bg-[#0E0F12] pt-6 pb-12 lg:pb-16 px-4 sm:px-6 lg:px-8 text-neutral-400">
+        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center text-center gap-3">
           <BunkrLogo variant="horizontal" size="sm" showSubtitle={false} />
-          <p className="text-xs text-neutral-400 font-medium tracking-wide">
-            Created by Mushfiq Hasan Efaz
-          </p>
+          <div className="space-y-2">
+            <p className="text-xs text-neutral-400 font-medium tracking-wide">
+              Created by Mushfiq Hasan Efaz
+            </p>
+            <div className="flex items-center justify-center gap-4 pt-1">
+              <a href="https://github.com/mushfiq-dev" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-amber-400 transition-colors" title="GitHub">
+                <Github className="w-4 h-4" />
+              </a>
+              <a href="mailto:mushfiqhasanefaz@gmail.com" className="text-neutral-500 hover:text-amber-400 transition-colors" title="Email">
+                <Mail className="w-4 h-4" />
+              </a>
+            </div>
+          </div>
         </div>
       </footer>
 

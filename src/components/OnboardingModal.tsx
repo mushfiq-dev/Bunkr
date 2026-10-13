@@ -66,11 +66,19 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
           <div className="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
 
           {/* Header with Prominent, Perfectly Aligned Bunkr Logo */}
-          <div className="text-center space-y-2 pt-1">
+          <div className="text-center space-y-4 pt-1">
             <BunkrLogo variant="vertical" size="lg" glow={true} className="mx-auto" />
-            <p className="text-xs text-neutral-400 max-w-xs mx-auto leading-relaxed">
-              Department of Computer Science & Engineering (AUST) · Configure student profile & semester tracker
-            </p>
+            <div className="space-y-1.5">
+              <h3 className="text-sm font-bold text-neutral-200 tracking-wide">
+                AUST CSE Semester Tracker
+              </h3>
+              <p className="text-xs font-mono text-amber-400/90">
+                Attendance • CGPA • Curriculum
+              </p>
+              <p className="text-[11px] text-neutral-500 font-medium pt-1">
+                Created by Mushfiq Hasan Efaz
+              </p>
+            </div>
           </div>
 
           {/* Profile Setup Form */}

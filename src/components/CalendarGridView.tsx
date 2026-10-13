@@ -215,7 +215,7 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
                           return (
                             <div
                               key={course}
-                              className={`px-1.5 py-0.5 rounded text-[10px] font-mono flex items-center justify-between ${
+                              className={`rounded text-[10px] font-mono flex flex-col items-center justify-center text-center p-1 ${
                                 status === 'attended'
                                   ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-800/50'
                                   : status === 'skipped'
@@ -223,8 +223,8 @@ export const CalendarGridView: React.FC<CalendarGridViewProps> = ({
                                   : 'bg-neutral-800 text-neutral-300 border border-neutral-700/60'
                               }`}
                             >
-                              <span className="truncate">{course}</span>
-                              <span className="text-[9px] shrink-0">
+                              <span className="break-words text-wrap leading-tight text-center">{course}</span>
+                              <span className="text-[9px] shrink-0 mt-0.5">
                                 {status === 'attended' && '✓'}
                                 {status === 'skipped' && '✕'}
                               </span>
