@@ -357,7 +357,7 @@ export default function App() {
       />
 
       {/* Main Layout: Desktop Sidebar + Main Content Area */}
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-11 flex flex-col lg:flex-row gap-8 lg:gap-12 pb-[env(safe-area-inset-bottom)] lg:overflow-hidden">
+      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col lg:flex-row gap-6 lg:gap-8 pb-[env(safe-area-inset-bottom)] lg:overflow-hidden min-h-0">
         
         {/* Left Sidebar with Profile, Curriculum, Semester Glider, BD Holidays */}
         <Sidebar
@@ -380,7 +380,7 @@ export default function App() {
         />
 
         {/* Right Main Dashboard Area */}
-        <main className="flex-1 min-w-0 space-y-10 sm:space-y-12 lg:overflow-y-auto lg:h-full lg:pr-2 pb-24">
+        <main className="flex-1 min-w-0 space-y-8 sm:space-y-10 lg:overflow-y-auto lg:h-full lg:pr-2 flex flex-col">
           
           {/* Daily Attendance Fast-Log Section - Shown on Attendance Tab */}
           {activeTab === 'attendance' && (
@@ -520,27 +520,28 @@ export default function App() {
               )}
             </div>
           )}
+
+          {/* Footer inside scrollable main: visible at end of content, never obscuring dashboard */}
+          <footer className="mt-auto border-t border-neutral-900 bg-[#0E0F12] pt-8 pb-12 lg:pb-16 px-4 sm:px-6 lg:px-8 text-neutral-400 rounded-2xl">
+            <div className="max-w-7xl mx-auto flex flex-col items-center justify-center text-center gap-3">
+              <BunkrLogo variant="horizontal" size="sm" showSubtitle={false} />
+              <div className="space-y-2">
+                <p className="text-xs text-neutral-400 font-medium tracking-wide">
+                  Created by Mushfiq Hasan Efaz
+                </p>
+                <div className="flex items-center justify-center gap-4 pt-1">
+                  <a href="https://github.com/mushfiq-dev" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-amber-400 transition-colors" title="GitHub">
+                    <Github className="w-4 h-4" />
+                  </a>
+                  <a href="mailto:mushfiqhasanefaz@gmail.com" className="text-neutral-500 hover:text-amber-400 transition-colors" title="Email">
+                    <Mail className="w-4 h-4" />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </footer>
         </main>
       </div>
-
-      <footer className="mt-auto border-t border-neutral-900 bg-[#0E0F12] pt-6 pb-12 lg:pb-16 px-4 sm:px-6 lg:px-8 text-neutral-400">
-        <div className="max-w-7xl mx-auto flex flex-col items-center justify-center text-center gap-3">
-          <BunkrLogo variant="horizontal" size="sm" showSubtitle={false} />
-          <div className="space-y-2">
-            <p className="text-xs text-neutral-400 font-medium tracking-wide">
-              Created by Mushfiq Hasan Efaz
-            </p>
-            <div className="flex items-center justify-center gap-4 pt-1">
-              <a href="https://github.com/mushfiq-dev" target="_blank" rel="noopener noreferrer" className="text-neutral-500 hover:text-amber-400 transition-colors" title="GitHub">
-                <Github className="w-4 h-4" />
-              </a>
-              <a href="mailto:mushfiqhasanefaz@gmail.com" className="text-neutral-500 hover:text-amber-400 transition-colors" title="Email">
-                <Mail className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
-        </div>
-      </footer>
 
       {/* Onboarding & Profile Setup Modal */}
       <OnboardingModal
