@@ -25,22 +25,22 @@ export const BunkrLogo: React.FC<BunkrLogoProps> = ({
   glow = true,
   svgClass,
 }) => {
-  // Proportional icon dimensions
+  // Proportional icon dimensions (calibrated for mobile & desktop harmony)
   const iconSizes = {
     xs: 'w-5 h-5',
-    sm: 'w-7 h-7',
-    md: 'w-11 h-11 sm:w-12 sm:h-12',
-    lg: 'w-20 h-20 sm:w-24 sm:h-24',
-    xl: 'w-28 h-28 sm:w-32 sm:h-32',
+    sm: 'w-6 h-6 sm:w-7 sm:h-7',
+    md: 'w-9 h-9 sm:w-11 sm:h-11',
+    lg: 'w-13 h-13 sm:w-16 sm:h-16 md:w-18 md:h-18',
+    xl: 'w-22 h-22 sm:w-26 sm:h-26 md:w-28 md:h-28',
   };
 
   // Proportional wordmark heights
   const wordmarkSizes = {
     xs: 'h-4 w-auto',
-    sm: 'h-5 w-auto',
-    md: 'h-6 sm:h-7 w-auto',
-    lg: 'h-10 sm:h-12 w-auto',
-    xl: 'h-14 sm:h-16 w-auto',
+    sm: 'h-4.5 sm:h-5 w-auto',
+    md: 'h-5.5 sm:h-6.5 w-auto',
+    lg: 'h-7 sm:h-8.5 md:h-9.5 w-auto',
+    xl: 'h-11 sm:h-13 md:h-14 w-auto',
   };
 
   /**
@@ -226,11 +226,11 @@ export const BunkrLogo: React.FC<BunkrLogoProps> = ({
     return (
       <div className={`flex flex-col items-center justify-center text-center select-none gap-2 ${className}`}>
         <div className="flex items-center justify-center">
-          <EmblemSVG svgClass={size === 'xl' ? 'w-32 h-32 sm:w-36 sm:h-36' : size === 'lg' ? 'w-24 h-24 sm:w-30 sm:h-30' : 'w-18 h-18 sm:w-20 sm:h-20'} />
+          <EmblemSVG svgClass={size === 'xl' ? 'w-24 h-24 sm:w-28 sm:h-28' : size === 'lg' ? 'w-16 h-16 sm:w-20 sm:h-20' : 'w-12 h-12 sm:w-14 sm:h-14'} />
         </div>
 
         <div className="flex items-center justify-center">
-          <WordmarkSVG svgClass={size === 'xl' ? 'h-14 sm:h-16' : size === 'lg' ? 'h-10 sm:h-12' : 'h-7 sm:h-8'} />
+          <WordmarkSVG svgClass={size === 'xl' ? 'h-11 sm:h-13' : size === 'lg' ? 'h-7 sm:h-8.5' : 'h-5.5 sm:h-6.5'} />
         </div>
 
         {showSubtitle && subtitleText && (

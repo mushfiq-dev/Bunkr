@@ -12,6 +12,7 @@ import {
   Download,
   Edit3,
   Layers,
+  X,
 } from 'lucide-react';
 import { UserProfile, CourseAssessment, ActiveTabType } from '../types';
 import { ALL_SEMESTERS_CURRICULUM } from '../data/curriculum';
@@ -81,14 +82,27 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </div>
           </div>
 
-          <button
-            onClick={onOpenEditProfile}
-            className="p-1.5 rounded-lg text-neutral-400 hover:text-amber-300 hover:bg-neutral-800 transition-colors shrink-0"
-            title="Edit student profile and year/semester"
-            aria-label="Edit Profile"
-          >
-            <Edit3 className="w-3.5 h-3.5" />
-          </button>
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              onClick={() => {
+                onOpenEditProfile();
+                onCloseMobile();
+              }}
+              className="p-1.5 rounded-lg text-neutral-400 hover:text-amber-300 hover:bg-neutral-800 transition-colors"
+              title="Edit student profile and year/semester"
+              aria-label="Edit Profile"
+            >
+              <Edit3 className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={onCloseMobile}
+              className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-800 transition-colors"
+              title="Close navigation menu"
+              aria-label="Close navigation menu"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
         </div>
 
         {/* Academic Status Card */}
@@ -244,7 +258,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* 5. Bottom Settings & Data Tools */}
       <div className="p-3 border-t border-neutral-800 bg-[#121316] flex items-center justify-between gap-2">
         <button
-          onClick={onOpenAdmin}
+          onClick={() => {
+            onOpenAdmin();
+            onCloseMobile();
+          }}
           className="flex-1 py-1.5 px-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-[11px] font-medium text-neutral-300 hover:text-white hover:border-amber-500/40 flex items-center justify-center gap-1.5 transition-colors"
         >
           <Shield className="w-3.5 h-3.5 text-amber-400" />
@@ -252,7 +269,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </button>
 
         <button
-          onClick={onOpenExport}
+          onClick={() => {
+            onOpenExport();
+            onCloseMobile();
+          }}
           className="py-1.5 px-2.5 rounded-lg bg-neutral-900 border border-neutral-800 text-[11px] font-medium text-neutral-300 hover:text-amber-300 hover:border-amber-500/40 flex items-center justify-center gap-1.5 transition-colors"
           title="Backup & Export Local Database"
         >
@@ -281,7 +301,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
             transition={{ type: "spring", bounce: 0, duration: 0.4 }}
-            className="relative w-80 max-w-[85vw] h-full z-10 shadow-2xl"
+            className="relative w-80 max-w-[85vw] h-full z-10 shadow-2xl flex flex-col bg-[#14151A] overflow-hidden"
           >
             {content}
           </motion.div>

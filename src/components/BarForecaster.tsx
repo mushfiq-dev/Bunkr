@@ -853,12 +853,16 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
             )}
 
             {/* Total Course Score Banner */}
-            <div className="p-3.5 rounded-xl bg-neutral-950 border border-neutral-800 text-xs flex items-center justify-between">
+            <div className={`p-3.5 rounded-xl border text-xs flex items-center justify-between transition-colors ${
+              calculation.isPassBarReached
+                ? 'bg-emerald-950/20 border-emerald-800/40'
+                : 'bg-neutral-950 border border-neutral-800'
+            }`}>
               <div>
                 <span className="text-neutral-400 block text-[10px] uppercase font-mono">
                   {isSelectedCourseLab ? 'Total Lab Score' : 'Total Course Score'}
                 </span>
-                <div className="text-lg font-bold font-mono text-amber-300">
+                <div className={`text-lg font-bold font-mono ${calculation.isPassBarReached ? 'text-emerald-300' : 'text-amber-300'}`}>
                   {isSelectedCourseLab
                     ? `${calculation.labTotalObtained} / ${calculation.labTotalMax}`
                     : `${calculation.totalCourseMarks} / 100`}
@@ -869,8 +873,15 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
               </div>
 
               <div className="text-right">
-                <span className="text-neutral-400 block text-[10px] uppercase font-mono">Current Letter Grade</span>
+                <span className="text-neutral-400 block text-[10px] uppercase font-mono">
+                  {calculation.isPassBarReached ? 'Passbar Status' : 'Current Letter Grade'}
+                </span>
                 <div className="flex items-center gap-2 justify-end">
+                  {calculation.isPassBarReached && (
+                    <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                      ✓ Passbar Reached
+                    </span>
+                  )}
                   <span className="px-2 py-0.5 rounded text-xs font-bold font-mono bg-amber-500/20 text-amber-300 border border-amber-500/30">
                     {calculation.achievedGrade.letterGrade}
                   </span>
@@ -886,42 +897,78 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
 
         {/* Right Column: The Pass Bar Forecaster Target */}
         <div className="lg:col-span-6 space-y-4">
-          <div className="p-5 rounded-2xl bg-gradient-to-br from-[#181920] via-neutral-900 to-[#181920] border border-amber-500/30 space-y-5 shadow-xl">
+          <div className={`p-5 rounded-2xl bg-gradient-to-br border space-y-5 shadow-xl transition-all ${
+            calculation.isPassBarReached
+              ? 'from-[#181920] via-emerald-950/20 to-[#181920] border-emerald-500/40'
+              : 'from-[#181920] via-neutral-900 to-[#181920] border-amber-500/30'
+          }`}>
             
             <div className="flex items-center justify-between pb-3 border-b border-neutral-800">
               <div className="flex items-center gap-2">
-                <Flame className="w-4 h-4 text-amber-400" />
+                <Flame className={`w-4 h-4 ${calculation.isPassBarReached ? 'text-emerald-400' : 'text-amber-400'}`} />
                 <h3 className="text-xs font-bold uppercase tracking-wider text-neutral-200">
                   {isSelectedCourseLab
                     ? 'Pass Bar Forecaster (Custom Lab Marks)'
                     : 'Pass Bar Forecaster (Final Exam / 50)'}
                 </h3>
               </div>
-              <span className="text-xs text-neutral-400 font-mono">
-                Passing Bar: 40% (Grade D)
-              </span>
+              {calculation.isPassBarReached ? (
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-[11px] font-mono font-semibold flex items-center gap-1 shadow-sm">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                  Passbar Reached
+                </span>
+              ) : (
+                <span className="text-xs text-neutral-400 font-mono">
+                  Passing Bar: 40% (Grade D)
+                </span>
+              )}
             </div>
 
             {/* The Big Pass Bar Highlight */}
-            <div className="p-4 rounded-xl bg-neutral-950/80 border border-neutral-800 text-center space-y-2">
-              <span className="text-xs text-neutral-400 uppercase tracking-wider">
+            <div className={`p-4 sm:p-5 rounded-xl border text-center space-y-2.5 transition-all ${
+              calculation.isPassBarReached
+                ? 'bg-gradient-to-b from-emerald-950/40 via-neutral-950/90 to-neutral-950/90 border-emerald-500/50 shadow-inner'
+                : 'bg-neutral-950/80 border-neutral-800'
+            }`}>
+              <span className="text-xs text-neutral-400 uppercase tracking-wider block font-medium">
                 {isSelectedCourseLab
                   ? 'Marks Needed Across Remaining Exams to Pass (40%)'
                   : 'Marks Needed in Final to Pass Course'}
               </span>
 
-              <div className="text-4xl font-extrabold font-mono text-amber-400 tracking-tight py-1">
-                {isSelectedCourseLab ? calculation.labMarksNeededToPass : calculation.finalExamPassNeeded}{' '}
-                <span className="text-lg font-normal text-neutral-400">
-                  {isSelectedCourseLab ? `/ ${calculation.labTotalMax || 100} Total` : '/ 50'}
-                </span>
-              </div>
+              {calculation.isPassBarReached ? (
+                <div className="py-2 flex flex-col items-center justify-center gap-1.5">
+                  <div className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-2xl bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 shadow-md">
+                    <CheckCircle2 className="w-6 h-6 text-emerald-400 shrink-0" />
+                    <span className="text-2xl sm:text-3xl font-black font-mono tracking-tight uppercase">
+                      Passbar Reached
+                    </span>
+                  </div>
+                  <div className="text-xs sm:text-sm font-mono text-emerald-400/90 font-medium pt-0.5">
+                    {isSelectedCourseLab ? 'Lab Marks Secured' : 'Pre-Final Marks Secured'}:{' '}
+                    <strong className="text-emerald-200 font-bold">
+                      {isSelectedCourseLab ? calculation.labTotalObtained : calculation.preFinalTotal}
+                    </strong>
+                    {' '}/ {isSelectedCourseLab ? calculation.labTotalMax || 100 : 50} · Needed in Final:{' '}
+                    <strong className="text-emerald-200 font-bold">0 / 50</strong>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-4xl font-extrabold font-mono text-amber-400 tracking-tight py-1">
+                  {isSelectedCourseLab ? calculation.labMarksNeededToPass : calculation.finalExamPassNeeded}{' '}
+                  <span className="text-lg font-normal text-neutral-400">
+                    {isSelectedCourseLab ? `/ ${calculation.labTotalMax || 100} Total` : '/ 50'}
+                  </span>
+                </div>
+              )}
 
               <p className="text-xs text-neutral-300 max-w-sm mx-auto leading-relaxed">
-                {(isSelectedCourseLab ? calculation.labMarksNeededToPass : calculation.finalExamPassNeeded) === 0 ? (
-                  <span className="text-emerald-400 font-semibold flex items-center justify-center gap-1">
-                    <CheckCircle2 className="w-4 h-4" />
-                    Pass Bar (40% - Grade D) already secured!
+                {calculation.isPassBarReached ? (
+                  <span className="text-emerald-400 font-semibold flex items-center justify-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+                    <span>
+                      Passbar Reached! {isSelectedCourseLab ? calculation.labTotalObtained : calculation.preFinalTotal} marks already secured without final exam. Any additional marks in the final exam will raise your letter grade!
+                    </span>
                   </span>
                 ) : isSelectedCourseLab ? (
                   <span>
@@ -940,13 +987,15 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
               <div className="flex items-center justify-between text-xs">
                 <span className="text-neutral-400">
                   {isSelectedCourseLab ? 'Marks Secured So Far: ' : 'Pre-Final Continuous Secured: '}
-                  <strong className="text-neutral-100 font-mono">
+                  <strong className={calculation.isPassBarReached ? "text-emerald-300 font-mono" : "text-neutral-100 font-mono"}>
                     {isSelectedCourseLab ? calculation.labTotalObtained : calculation.preFinalTotal}
                   </strong>{' '}
                   / {isSelectedCourseLab ? calculation.labTotalMax || 100 : 50}
                 </span>
-                <span className="text-amber-400 font-mono font-bold">
-                  {isSelectedCourseLab
+                <span className={`font-mono font-bold ${calculation.isPassBarReached ? 'text-emerald-400' : 'text-amber-400'}`}>
+                  {calculation.isPassBarReached
+                    ? '✓ Passbar Reached'
+                    : isSelectedCourseLab
                     ? `${calculation.totalCourseMarks}% Total`
                     : `${calculation.percentageAchievedSoFar}% of Pre-Final`}
                 </span>

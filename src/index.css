@@ -37,6 +37,20 @@
   box-shadow: 0 0 20px -3px rgba(239, 68, 68, 0.25);
 }
 
+/* Smooth live circulating border beam animation */
+@keyframes border-beam {
+  0% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -100;
+  }
+}
+
+.animate-border-beam {
+  animation: border-beam 4s linear infinite;
+}
+
 /* Custom smooth dark scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import {
   Flame,
   Calendar,
@@ -60,6 +60,8 @@ import { SemesterGlider } from './components/SemesterGlider';
 import { AdminModal } from './components/AdminModal';
 import { OfflineIndicator } from './components/OfflineIndicator';
 import { BunkrLogo } from './components/BunkrLogo';
+import { AmberGradientMesh } from './components/AmberGradientMesh';
+import { useScroll, useMotionValue } from 'framer-motion';
 
 export default function App() {
   const [config, setConfig] = useState<RoutineConfig>(DEFAULT_ROUTINE_CONFIG);
@@ -81,6 +83,28 @@ export default function App() {
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const mainContentRef = useRef<HTMLElement>(null);
+
+  // Framer Motion scroll progress tracking across container and window
+  const { scrollYProgress: containerScrollProgress } = useScroll({ container: mainContentRef });
+  const { scrollYProgress: windowScrollProgress } = useScroll();
+  const scrollYProgress = useMotionValue(0);
+
+  useEffect(() => {
+    const unsubContainer = containerScrollProgress.on('change', (v) => {
+      scrollYProgress.set(v);
+    });
+    const unsubWindow = windowScrollProgress.on('change', (v) => {
+      const container = mainContentRef.current;
+      if (!container || container.scrollHeight <= container.clientHeight) {
+        scrollYProgress.set(v);
+      }
+    });
+    return () => {
+      unsubContainer();
+      unsubWindow();
+    };
+  }, [containerScrollProgress, windowScrollProgress, scrollYProgress]);
 
   // Load persistent state from IndexedDB on initial mount
   useEffect(() => {
@@ -342,8 +366,30 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen lg:h-screen lg:overflow-hidden bg-[#121316] text-[#F3F4F6] flex flex-col font-sans selection:bg-amber-600/30 selection:text-amber-200 select-none pb-[env(safe-area-inset-bottom)]">
-      
+    <div className="relative min-h-screen lg:h-screen lg:overflow-hidden bg-[#0E0F12] text-[#F3F4F6] flex flex-col font-sans selection:bg-amber-600/30 selection:text-amber-200 select-none pb-[env(safe-area-inset-bottom)]">
+      {/* Persistent Subtle Amber Gradient Mesh (Zero Clipping, Fluid Viewport Depth) */}
+      <AmberGradientMesh scrollYProgress={scrollYProgress} containerRef={mainContentRef} />
+
+      {/* Universal Sliding Profile Drawer (Hamburger / Off-canvas) */}
+      <Sidebar
+        profile={userProfile}
+        activeTab={activeTab}
+        onSelectTab={setActiveTab}
+        onOpenEditProfile={() => setIsOnboardingOpen(true)}
+        onOpenAdmin={() => setIsAdminModalOpen(true)}
+        onOpenExport={() => setIsBackupModalOpen(true)}
+        isOpenMobile={isMobileSidebarOpen}
+        onCloseMobile={() => setIsMobileSidebarOpen(false)}
+        cumulativeCGPA={cumulativeCGPA}
+        assessments={assessments}
+        historicalGPAs={historicalGPAs}
+        onSelectCourseForForecaster={(courseCode) => {
+          setSelectedForecasterCourse(courseCode);
+          setActiveTab('forecaster');
+        }}
+        currentSemesterKey={activeSemesterKey}
+      />
+
       {/* Top Bar Navigation */}
       <Navbar
         activeTab={activeTab}
@@ -356,31 +402,11 @@ export default function App() {
         onOpenProfile={() => setIsOnboardingOpen(true)}
       />
 
-      {/* Main Layout: Universal Off-Canvas Sidebar + Centered Main Dashboard */}
-      <div className="flex-1 max-w-[1600px] w-[96%] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col pb-[env(safe-area-inset-bottom)] lg:overflow-hidden min-h-0">
+      {/* Main Layout: Centered Main Dashboard */}
+      <div className="relative z-10 flex-1 max-w-[1600px] w-[96%] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col pb-[env(safe-area-inset-bottom)] lg:overflow-hidden min-h-0">
         
-        {/* Left Off-Canvas Sidebar with Profile, Curriculum, Semester Glider, BD Holidays */}
-        <Sidebar
-          profile={userProfile}
-          activeTab={activeTab}
-          onSelectTab={setActiveTab}
-          onOpenEditProfile={() => setIsOnboardingOpen(true)}
-          onOpenAdmin={() => setIsAdminModalOpen(true)}
-          onOpenExport={() => setIsBackupModalOpen(true)}
-          isOpenMobile={isMobileSidebarOpen}
-          onCloseMobile={() => setIsMobileSidebarOpen(false)}
-          cumulativeCGPA={cumulativeCGPA}
-          assessments={assessments}
-          historicalGPAs={historicalGPAs}
-          onSelectCourseForForecaster={(courseCode) => {
-            setSelectedForecasterCourse(courseCode);
-            setActiveTab('forecaster');
-          }}
-          currentSemesterKey={activeSemesterKey}
-        />
-
         {/* Center Main Dashboard Area */}
-        <main className="flex-1 min-w-0 space-y-8 sm:space-y-10 lg:overflow-y-auto lg:h-full lg:pr-2 flex flex-col w-full max-w-6xl mx-auto">
+        <main ref={mainContentRef} className="flex-1 min-w-0 space-y-8 sm:space-y-10 lg:overflow-y-auto lg:h-full lg:pr-2 flex flex-col w-full max-w-6xl mx-auto">
           
           {/* Daily Attendance Fast-Log Section - Shown on Attendance Tab */}
           {activeTab === 'attendance' && (
@@ -522,7 +548,7 @@ export default function App() {
           )}
 
           {/* Footer inside scrollable main: visible at end of content, never obscuring dashboard */}
-          <footer className="mt-auto border-t border-neutral-900 bg-[#0E0F12] pt-8 pb-12 lg:pb-16 px-4 sm:px-6 lg:px-8 text-neutral-400 rounded-2xl">
+          <footer className="mt-auto border-t border-neutral-900/80 bg-[#0E0F12]/80 backdrop-blur-md pt-8 pb-12 lg:pb-16 px-4 sm:px-6 lg:px-8 text-neutral-400 rounded-3xl shadow-xl">
             <div className="max-w-[1600px] w-full mx-auto flex flex-col items-center justify-center text-center gap-3">
               <BunkrLogo variant="horizontal" size="sm" showSubtitle={false} />
               <div className="space-y-2">

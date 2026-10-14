@@ -234,6 +234,7 @@ export interface BarForecasterResult {
   finalExamMax: number; // 50
   percentageAchievedSoFar: number;
   totalCourseMarks: number; // out of 100
+  isPassBarReached: boolean; // pre-final marks >= 40 (or lab pass threshold met without final)
   hasFinalExamEntered: boolean;
   targetGrades: TargetGradeForecast[];
   achievedGrade: GradingScaleTier;
@@ -346,6 +347,7 @@ export const calculateBarForecaster = (
       finalExamMax: labTotalMax,
       percentageAchievedSoFar: Math.round(percentage),
       totalCourseMarks,
+      isPassBarReached: labMarksNeededToPass === 0,
       hasFinalExamEntered: hasAnyEntered,
       targetGrades,
       achievedGrade,
@@ -465,6 +467,7 @@ export const calculateBarForecaster = (
     finalExamMax: 50,
     percentageAchievedSoFar,
     totalCourseMarks,
+    isPassBarReached: preFinalTotal >= 40,
     hasFinalExamEntered,
     targetGrades,
     achievedGrade,

@@ -24,34 +24,39 @@ export const Navbar: React.FC<NavbarProps> = ({
   onSelectTab,
   onToggleSidebar,
 }) => {
-  const tabs: { id: ActiveTabType; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
-    { id: 'attendance', label: 'Attendance', icon: CheckSquare },
-    { id: 'calendar', label: 'Calendar', icon: Calendar },
-    { id: 'forecaster', label: 'Bar Forecaster', icon: Sparkles },
+  const tabs: {
+    id: ActiveTabType;
+    label: string;
+    mobileLabel: string;
+    icon: React.ComponentType<{ className?: string }>;
+  }[] = [
+    { id: 'attendance', label: 'Attendance', mobileLabel: 'Attendance', icon: CheckSquare },
+    { id: 'calendar', label: 'Calendar', mobileLabel: 'Calendar', icon: Calendar },
+    { id: 'forecaster', label: 'Bar Forecaster', mobileLabel: 'Forecaster', icon: Sparkles },
   ];
 
   const activeIndex = tabs.findIndex((t) => t.id === activeTab);
 
   return (
     <header className="sticky top-0 z-40 bg-[#121316]/95 backdrop-blur-md border-b border-amber-950/30">
-      <div className="max-w-[1600px] w-[96%] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
+      <div className="max-w-[1600px] w-[96%] mx-auto px-2.5 sm:px-6 lg:px-8 py-3 sm:py-5">
         
-        {/* Top Row: Centered Logo and Brand Name Only (No CSE AUST subtitle) */}
-        <div className="relative flex items-center justify-center">
+        {/* Top Row: Centered Logo and Brand Name (Protected spacing so hamburger never overlaps) */}
+        <div className="relative flex items-center justify-center min-h-[44px] sm:min-h-[52px]">
           {/* Universal Sidebar Hamburger Toggle (Anchored on the left) */}
           {onToggleSidebar && (
             <button
               onClick={onToggleSidebar}
-              className="absolute left-0 p-2.5 rounded-2xl text-neutral-400 hover:text-amber-300 hover:bg-neutral-800/60 transition-colors"
+              className="absolute left-0 p-2 sm:p-2.5 rounded-2xl text-neutral-400 hover:text-amber-300 hover:bg-neutral-800/60 transition-colors z-20 focus:outline-none focus:ring-2 focus:ring-amber-500/50"
               title="Toggle Menu / Sidebar"
               aria-label="Toggle navigation menu"
             >
-              <Menu className="w-5 h-5" />
+              <Menu className="w-5 h-5 sm:w-5.5 sm:h-5.5" />
             </button>
           )}
 
           {/* Centered Website Branding: Logo and Name */}
-          <div className="flex items-center justify-center">
+          <div className="flex items-center justify-center px-11 sm:px-0">
             <button
               onClick={() => onSelectTab('attendance')}
               className="group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50 rounded-2xl p-1 transition-transform active:scale-95 cursor-pointer"
@@ -70,7 +75,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         </div>
 
         {/* Bottom Row: Spacious, Smooth Slider for Attendance, Calendar, Bar Forecaster */}
-        <div className="mt-4 sm:mt-5 flex justify-center">
+        <div className="mt-3.5 sm:mt-5 flex justify-center">
           <div className="relative w-full max-w-lg sm:max-w-xl bg-[#181920] border border-neutral-800 p-1.5 rounded-2xl shadow-lg">
             {/* Smooth Sliding Pill Indicator */}
             <div
@@ -93,18 +98,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                   <button
                     key={tab.id}
                     onClick={() => onSelectTab(tab.id)}
-                    className={`relative py-2.5 sm:py-3 px-3 text-xs sm:text-sm font-semibold rounded-xl flex items-center justify-center gap-2 sm:gap-2.5 transition-colors duration-200 select-none ${
+                    className={`relative py-2 sm:py-2.5 px-1 sm:px-3 text-[11px] sm:text-xs md:text-sm font-semibold tracking-tight sm:tracking-normal rounded-xl flex items-center justify-center gap-1 sm:gap-2 transition-colors duration-200 select-none ${
                       isActive
                         ? 'text-amber-300'
                         : 'text-neutral-400 hover:text-neutral-200'
                     }`}
                   >
                     <Icon
-                      className={`w-4 h-4 sm:w-4.5 sm:h-4.5 shrink-0 transition-colors ${
+                      className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 transition-colors ${
                         isActive ? 'text-amber-400' : 'text-neutral-400'
                       }`}
                     />
-                    <span className="truncate">{tab.label}</span>
+                    <span className="whitespace-nowrap">
+                      <span className="sm:hidden">{tab.mobileLabel}</span>
+                      <span className="hidden sm:inline">{tab.label}</span>
+                    </span>
                   </button>
                 );
               })}

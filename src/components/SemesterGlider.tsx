@@ -538,8 +538,8 @@ export const SemesterGlider: React.FC<SemesterGliderProps> = ({
                       </div>
 
                       <div className="text-[10px]">
-                        {calc.finalExamPassNeeded === 0 ? (
-                          <span className="text-emerald-400 font-semibold">✓ 40% Pass Bar Cleared</span>
+                        {calc.isPassBarReached ? (
+                          <span className="text-emerald-400 font-semibold">✓ Passbar Reached (40%)</span>
                         ) : (
                           <span className="text-amber-400/90">
                             Pass Bar Need: {calc.finalExamPassNeeded}/50
@@ -702,9 +702,9 @@ export const SemesterGlider: React.FC<SemesterGliderProps> = ({
                         </span>
 
                         <div>
-                          {calc.labMarksNeededToPass === 0 ? (
+                          {calc.isPassBarReached ? (
                             <span className="text-emerald-400 font-semibold">
-                              ✓ 40% Pass Bar Cleared
+                              ✓ Passbar Reached (40%)
                             </span>
                           ) : (
                             <span className="text-amber-400/90">
