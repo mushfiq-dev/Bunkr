@@ -34,15 +34,15 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <header className="sticky top-0 z-40 bg-[#121316]/95 backdrop-blur-md border-b border-amber-950/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
+      <div className="max-w-[1600px] w-[96%] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-5">
         
         {/* Top Row: Centered Logo and Brand Name Only (No CSE AUST subtitle) */}
         <div className="relative flex items-center justify-center">
-          {/* Mobile Sidebar Hamburger Toggle (Anchored on the left) */}
+          {/* Universal Sidebar Hamburger Toggle (Anchored on the left) */}
           {onToggleSidebar && (
             <button
               onClick={onToggleSidebar}
-              className="absolute left-0 p-2.5 rounded-2xl text-neutral-400 hover:text-amber-300 hover:bg-neutral-800/60 lg:hidden transition-colors"
+              className="absolute left-0 p-2.5 rounded-2xl text-neutral-400 hover:text-amber-300 hover:bg-neutral-800/60 transition-colors"
               title="Toggle Menu / Sidebar"
               aria-label="Toggle navigation menu"
             >
@@ -50,7 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           )}
 
-          {/* Centered Website Branding: Logo (1.jpg) and Name (4.jpg) */}
+          {/* Centered Website Branding: Logo and Name */}
           <div className="flex items-center justify-center">
             <button
               onClick={() => onSelectTab('attendance')}
@@ -60,7 +60,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             >
               <BunkrLogo
                 variant="horizontal"
-                size="md"
+                size="lg"
                 glow={true}
                 showSubtitle={false}
                 className="transition-transform group-hover:scale-[1.02]"

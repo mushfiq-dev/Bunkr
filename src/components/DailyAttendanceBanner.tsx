@@ -69,7 +69,7 @@ export const DailyAttendanceBanner: React.FC<DailyAttendanceBannerProps> = ({
   });
 
   return (
-    <div className="relative overflow-hidden rounded-3xl bg-[#161720] border border-neutral-800 p-6 sm:p-8 shadow-xl transition-all">
+    <div className="relative overflow-hidden rounded-3xl bg-[#161720] border border-neutral-800 p-6 sm:p-8 shadow-xl transition-all shrink-0">
       {/* Subtle ambient ember glow */}
       <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
 
@@ -221,7 +221,7 @@ export const DailyAttendanceBanner: React.FC<DailyAttendanceBannerProps> = ({
                       title={`Click to cycle attendance for ${course} on ${todayKey} (Currently: ${status})`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-mono font-bold text-sm sm:text-base tracking-wide text-neutral-100">
+                        <span className="font-mono font-bold text-base sm:text-lg tracking-wide text-neutral-100">
                           {course}
                         </span>
                         {status === 'attended' && (

@@ -406,7 +406,7 @@ export const AttendanceGrid: React.FC<AttendanceGridProps> = ({
                 <div className="flex items-start justify-between">
                   <div>
                     <div className="flex items-center gap-2.5">
-                      <span className="text-xl font-extrabold font-mono text-neutral-100 tracking-tight">
+                      <span className="text-2xl font-extrabold font-mono text-neutral-100 tracking-tight">
                         {summary.courseCode}
                       </span>
                       {summary.credits && (
@@ -422,7 +422,7 @@ export const AttendanceGrid: React.FC<AttendanceGridProps> = ({
 
                   <div className="text-right">
                     <span
-                      className={`text-xl sm:text-2xl font-black font-mono tabular-nums ${
+                      className={`text-2xl sm:text-3xl font-black font-mono tabular-nums ${
                         summary.currentRate >= 70 ? 'text-emerald-400' : 'text-rose-400'
                       }`}
                     >
@@ -442,10 +442,19 @@ export const AttendanceGrid: React.FC<AttendanceGridProps> = ({
                       style={{ width: `${Math.min(100, Math.max(0, summary.currentRate))}%` }}
                     />
                   </div>
-                  <div className="flex justify-between text-xs text-neutral-400 font-mono pt-0.5">
-                    <span>Attended: {summary.attendedCount}</span>
-                    <span>Skipped: {summary.skippedCount}</span>
-                    <span>Total Planned: {summary.totalPlannedClasses}</span>
+                  <div className="grid grid-cols-3 gap-2 text-center pt-3 border-t border-neutral-800/60 font-mono divide-x divide-neutral-800">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] text-neutral-500 uppercase">Attended</span>
+                      <strong className="text-neutral-200 text-sm">{summary.attendedCount}</strong>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] text-neutral-500 uppercase">Skipped</span>
+                      <strong className="text-neutral-200 text-sm">{summary.skippedCount}</strong>
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] text-neutral-500 uppercase">Total Planned</span>
+                      <strong className="text-neutral-200 text-sm">{summary.totalPlannedClasses}</strong>
+                    </div>
                   </div>
                 </div>
 

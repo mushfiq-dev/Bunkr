@@ -356,10 +356,10 @@ export default function App() {
         onOpenProfile={() => setIsOnboardingOpen(true)}
       />
 
-      {/* Main Layout: Desktop Sidebar + Main Content Area */}
-      <div className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col lg:flex-row gap-6 lg:gap-8 pb-[env(safe-area-inset-bottom)] lg:overflow-hidden min-h-0">
+      {/* Main Layout: Universal Off-Canvas Sidebar + Centered Main Dashboard */}
+      <div className="flex-1 max-w-[1600px] w-[96%] mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col pb-[env(safe-area-inset-bottom)] lg:overflow-hidden min-h-0">
         
-        {/* Left Sidebar with Profile, Curriculum, Semester Glider, BD Holidays */}
+        {/* Left Off-Canvas Sidebar with Profile, Curriculum, Semester Glider, BD Holidays */}
         <Sidebar
           profile={userProfile}
           activeTab={activeTab}
@@ -379,8 +379,8 @@ export default function App() {
           currentSemesterKey={activeSemesterKey}
         />
 
-        {/* Right Main Dashboard Area */}
-        <main className="flex-1 min-w-0 space-y-8 sm:space-y-10 lg:overflow-y-auto lg:h-full lg:pr-2 flex flex-col">
+        {/* Center Main Dashboard Area */}
+        <main className="flex-1 min-w-0 space-y-8 sm:space-y-10 lg:overflow-y-auto lg:h-full lg:pr-2 flex flex-col w-full max-w-6xl mx-auto">
           
           {/* Daily Attendance Fast-Log Section - Shown on Attendance Tab */}
           {activeTab === 'attendance' && (
@@ -395,7 +395,7 @@ export default function App() {
           )}
 
           {/* Academic Semester Info Banner - Spacious, Clean, Refined Typography */}
-          <div className="relative overflow-hidden rounded-3xl bg-[#161720] border border-neutral-800 p-6 sm:p-8 shadow-xl">
+          <div className="relative overflow-hidden rounded-3xl bg-[#161720] border border-neutral-800 p-6 sm:p-8 shadow-xl shrink-0">
             <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-amber-500/10 blur-3xl pointer-events-none" />
 
             <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -523,7 +523,7 @@ export default function App() {
 
           {/* Footer inside scrollable main: visible at end of content, never obscuring dashboard */}
           <footer className="mt-auto border-t border-neutral-900 bg-[#0E0F12] pt-8 pb-12 lg:pb-16 px-4 sm:px-6 lg:px-8 text-neutral-400 rounded-2xl">
-            <div className="max-w-7xl mx-auto flex flex-col items-center justify-center text-center gap-3">
+            <div className="max-w-[1600px] w-full mx-auto flex flex-col items-center justify-center text-center gap-3">
               <BunkrLogo variant="horizontal" size="sm" showSubtitle={false} />
               <div className="space-y-2">
                 <p className="text-xs text-neutral-400 font-medium tracking-wide">

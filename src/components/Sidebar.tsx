@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Flame,
   User,
@@ -264,24 +265,28 @@ export const Sidebar: React.FC<SidebarProps> = ({
   );
 
   return (
-    <>
-      {/* Desktop Persistent Profile Sidebar */}
-      <aside className="hidden lg:block w-80 shrink-0 h-full lg:overflow-hidden flex flex-col">
-        {content}
-      </aside>
-
-      {/* Mobile Sliding Profile Drawer */}
+    <AnimatePresence>
       {isOpenMobile && (
-        <div className="fixed inset-0 z-50 lg:hidden flex">
-          <div
+        <div className="fixed inset-0 z-50 flex">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
             className="fixed inset-0 bg-black/75 backdrop-blur-sm"
             onClick={onCloseMobile}
           />
-          <div className="relative w-80 max-w-[85vw] h-full z-10 shadow-2xl">
+          <motion.div
+            initial={{ x: "-100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "-100%" }}
+            transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+            className="relative w-80 max-w-[85vw] h-full z-10 shadow-2xl"
+          >
             {content}
-          </div>
+          </motion.div>
         </div>
       )}
-    </>
+    </AnimatePresence>
   );
 };
