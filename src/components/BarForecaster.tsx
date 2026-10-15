@@ -36,6 +36,7 @@ import {
 import {
   GRADING_SCALE,
   getCourseCredits,
+  getCourseTitle,
   ALL_SEMESTERS_CURRICULUM,
   getPriorSemesters,
   isCourseSessional,
@@ -73,7 +74,6 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
     }
   }, [selectedCourseProp]);
 
-  const [showGradingTable, setShowGradingTable] = useState(false);
   const [saveStatusMessage, setSaveStatusMessage] = useState<string>('All marks are permanently saved');
   const [lastSavedTime, setLastSavedTime] = useState<string>('Synced');
   const [isSavedBadgeVisible, setIsSavedBadgeVisible] = useState(true);
@@ -307,77 +307,22 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
   return (
     <div className="space-y-8">
       
-      {/* 1. Header & Course Selection Banner */}
-      <div className="p-5 sm:p-7 rounded-3xl bg-[#161720] border border-neutral-800 space-y-5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div>
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-amber-500" />
-              <h2 className="text-base font-bold text-neutral-100">
-                The Bar Forecaster & Academic Target Simulator
-              </h2>
-              <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-amber-500/10 text-amber-300 border border-amber-500/20">
-                Sem {currentSemesterInfo.shortLabel}
-              </span>
-            </div>
-            <p className="text-xs text-neutral-400 mt-0.5 leading-relaxed">
-              3 Quizzes (best 2 count for 20) + Midterm (20) + Misc (10) + Final (50) = 100 Marks. Computes exact score needed in Final Exam to pass 40% (Grade D).
-            </p>
+      {/* 1. Header & Course Selection Section */}
+      <div className="p-5 sm:p-7 rounded-3xl bg-[#161720] border border-neutral-800 space-y-6">
+        <div>
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-amber-500" />
+            <h2 className="text-base sm:text-lg font-bold text-neutral-100">
+              The Bar Forecaster & Academic Target Simulator
+            </h2>
           </div>
-
-          <div className="flex items-center gap-2 shrink-0">
-            <button
-              onClick={() => setShowGradingTable(!showGradingTable)}
-              className="px-3 py-1.5 rounded-xl bg-neutral-900 border border-neutral-700 text-xs text-neutral-300 hover:text-amber-300 hover:border-amber-500/40 flex items-center gap-1.5 transition-colors"
-            >
-              <GraduationCap className="w-3.5 h-3.5 text-amber-400" />
-              <span>{showGradingTable ? 'Hide Grading Scale' : 'Grading Scale'}</span>
-            </button>
-          </div>
+          <p className="text-xs text-neutral-400 mt-1 leading-relaxed">
+            3 Quizzes (best 2 count for 20) + Midterm (20) + Misc (10) + Final (50) = 100 Marks. Computes exact score needed in Final Exam to pass 40% (Grade D).
+          </p>
         </div>
 
-        {/* Official Grading Scale Reference Table (Expandable) */}
-        {showGradingTable && (
-          <div className="p-4 rounded-xl bg-neutral-950 border border-amber-500/30 space-y-3">
-            <div className="flex items-center justify-between text-xs pb-2 border-b border-neutral-800">
-              <span className="font-semibold text-neutral-200">
-                Official University Grading System (Scale 4.00)
-              </span>
-              <span className="text-amber-400 font-mono text-[11px]">
-                Passing Threshold: 40% (Grade D, 2.00 GP)
-              </span>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs text-left">
-                <thead>
-                  <tr className="border-b border-neutral-800 text-neutral-400 font-medium">
-                    <th className="py-2 px-3">Numerical Score</th>
-                    <th className="py-2 px-3 text-center">Letter Grade</th>
-                    <th className="py-2 px-3 text-right">Grade Point</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-neutral-900 font-mono">
-                  {GRADING_SCALE.map((tier) => (
-                    <tr
-                      key={tier.letterGrade}
-                      className={tier.letterGrade === 'F' ? 'text-rose-400' : 'text-neutral-300'}
-                    >
-                      <td className="py-1.5 px-3">{tier.rangeLabel}</td>
-                      <td className="py-1.5 px-3 text-center font-bold text-amber-300">
-                        {tier.letterGrade}
-                      </td>
-                      <td className="py-1.5 px-3 text-right">{tier.gradePoint.toFixed(2)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {/* Course Selection Tabs: Theory Courses First, then Lab Courses */}
-        <div className="space-y-2.5">
+        {/* Course Selection List: Theory Courses First, then Lab Courses */}
+        <div className="space-y-6">
           {(() => {
             const theoryCoursesInRoutine = uniqueCourses.filter(
               (c) => !isCourseSessional(c) && !assessments[c]?.isLab
@@ -388,13 +333,14 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
 
             return (
               <>
-                {/* 1. Theory Courses Selection */}
-                <div className="space-y-1">
-                  <div className="flex items-center justify-between px-1 text-[10px] font-mono text-neutral-400">
+                {/* 1. Theory Courses Vertical List */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between px-1 text-xs font-mono text-neutral-400">
                     <span className="uppercase tracking-wider font-semibold">1. Theory Courses (Lecture)</span>
-                    <span>{theoryCoursesInRoutine.length} Courses</span>
+                    <span className="text-[11px] text-neutral-500">{theoryCoursesInRoutine.length} Courses</span>
                   </div>
-                  <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+
+                  <div className="space-y-2.5">
                     {theoryCoursesInRoutine.map((c) => {
                       const assess = assessments[c];
                       const hasData =
@@ -405,67 +351,119 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                           assess.midterm !== null ||
                           assess.misc !== null ||
                           assess.finalExam !== null);
-                      const cr = getCourseCredits(c);
+                      const isSelected = selectedCourse === c;
+                      const title = getCourseTitle(c);
 
                       return (
                         <button
                           key={c}
                           onClick={() => setSelectedCourse(c)}
-                          className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all flex items-center gap-2 whitespace-nowrap shrink-0 ${
-                            selectedCourse === c
-                              ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm font-bold'
-                              : 'bg-neutral-900 text-neutral-400 border border-neutral-800 hover:text-neutral-200'
+                          className={`w-full p-4 sm:p-4.5 rounded-2xl border transition-all flex items-center justify-between text-left cursor-pointer select-none active:scale-[0.99] shadow-sm ${
+                            isSelected
+                              ? 'bg-amber-500/15 border-amber-500/60 ring-1 ring-amber-500/30 text-amber-200'
+                              : 'bg-neutral-900/90 border-neutral-800 text-neutral-300 hover:border-neutral-700 hover:bg-neutral-850'
                           }`}
                         >
-                          <span>{c}</span>
-                          <span className="text-[10px] text-neutral-500 font-normal">({cr} Cr)</span>
-                          {hasData && (
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" title="Marks entered" />
-                          )}
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2.5">
+                              <span className={`font-mono font-bold text-sm sm:text-base ${isSelected ? 'text-amber-300' : 'text-neutral-100'}`}>
+                                {c}
+                              </span>
+                              {isSelected && (
+                                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                                  Selected
+                                </span>
+                              )}
+                            </div>
+                            {title && (
+                              <p className="text-xs text-neutral-400 line-clamp-1">
+                                {title}
+                              </p>
+                            )}
+                          </div>
+
+                          <div className="flex items-center gap-2 shrink-0 font-mono text-xs">
+                            {hasData ? (
+                              <span className="px-2.5 py-1 rounded-xl bg-emerald-950/60 text-emerald-300 border border-emerald-800/60 text-[11px] font-medium flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                                <span>Marks Entered</span>
+                              </span>
+                            ) : (
+                              <span className="px-2.5 py-1 rounded-xl bg-neutral-800/60 text-neutral-400 border border-neutral-700/60 text-[11px]">
+                                Pending Entry
+                              </span>
+                            )}
+                          </div>
                         </button>
                       );
                     })}
                   </div>
                 </div>
 
-                {/* 2. Lab Courses Selection */}
+                {/* 2. Lab Courses Vertical List */}
                 {labCoursesInRoutine.length > 0 && (
-                  <div className="space-y-1 pt-1.5 border-t border-neutral-800/60">
-                    <div className="flex items-center justify-between px-1 text-[10px] font-mono text-amber-400/90">
+                  <div className="space-y-3 pt-3 border-t border-neutral-800/80">
+                    <div className="flex items-center justify-between px-1 text-xs font-mono text-amber-400/90">
                       <span className="uppercase tracking-wider font-semibold flex items-center gap-1.5">
-                        <FlaskConical className="w-3 h-3 text-amber-400" />
+                        <FlaskConical className="w-3.5 h-3.5 text-amber-400" />
                         2. Lab / Sessional Courses (Custom Mark Distribution)
                       </span>
-                      <span>{labCoursesInRoutine.length} Labs</span>
+                      <span className="text-[11px] text-neutral-500">{labCoursesInRoutine.length} Labs</span>
                     </div>
-                    <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+
+                    <div className="space-y-2.5">
                       {labCoursesInRoutine.map((c) => {
                         const assess = assessments[c];
                         const hasData = !!(
                           assess?.labItems &&
                           assess.labItems.some((it) => it.marksObtained !== null)
                         );
-                        const cr = getCourseCredits(c);
+                        const isSelected = selectedCourse === c;
+                        const title = getCourseTitle(c);
 
                         return (
                           <button
                             key={c}
                             onClick={() => setSelectedCourse(c)}
-                            className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-all flex items-center gap-2 whitespace-nowrap shrink-0 ${
-                              selectedCourse === c
-                                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm font-bold'
-                                : 'bg-neutral-900 text-neutral-400 border border-neutral-800 hover:text-neutral-200'
+                            className={`w-full p-4 sm:p-4.5 rounded-2xl border transition-all flex items-center justify-between text-left cursor-pointer select-none active:scale-[0.99] shadow-sm ${
+                              isSelected
+                                ? 'bg-amber-500/15 border-amber-500/60 ring-1 ring-amber-500/30 text-amber-200'
+                                : 'bg-neutral-900/90 border-neutral-800 text-neutral-300 hover:border-neutral-700 hover:bg-neutral-850'
                             }`}
                           >
-                            <FlaskConical className="w-3 h-3 text-amber-400" />
-                            <span>{c}</span>
-                            <span className="text-[9px] px-1 py-0.2 rounded bg-amber-500/15 text-amber-300 font-sans">
-                              Lab
-                            </span>
-                            <span className="text-[10px] text-neutral-500 font-normal">({cr} Cr)</span>
-                            {hasData && (
-                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" title="Marks entered" />
-                            )}
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2.5">
+                                <span className={`font-mono font-bold text-sm sm:text-base ${isSelected ? 'text-amber-300' : 'text-neutral-100'}`}>
+                                  {c}
+                                </span>
+                                <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold bg-emerald-950/60 text-emerald-400 border border-emerald-800/60">
+                                  Lab
+                                </span>
+                                {isSelected && (
+                                  <span className="px-2 py-0.5 rounded-md text-[10px] font-mono font-semibold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                                    Selected
+                                  </span>
+                                )}
+                              </div>
+                              {title && (
+                                <p className="text-xs text-neutral-400 line-clamp-1">
+                                  {title}
+                                </p>
+                              )}
+                            </div>
+
+                            <div className="flex items-center gap-2 shrink-0 font-mono text-xs">
+                              {hasData ? (
+                                <span className="px-2.5 py-1 rounded-xl bg-emerald-950/60 text-emerald-300 border border-emerald-800/60 text-[11px] font-medium flex items-center gap-1.5">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                                  <span>Marks Entered</span>
+                                </span>
+                              ) : (
+                                <span className="px-2.5 py-1 rounded-xl bg-neutral-800/60 text-neutral-400 border border-neutral-700/60 text-[11px]">
+                                  Pending Entry
+                                </span>
+                              )}
+                            </div>
                           </button>
                         );
                       })}
@@ -493,7 +491,7 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                     Assessment Marks Input
                   </span>
                   <div className="text-[11px] text-neutral-400 font-mono mt-0.5">
-                    Course: <strong className="text-amber-400">{selectedCourse}</strong> · {courseCredits} Credits
+                    Course: <strong className="text-amber-400">{selectedCourse}</strong>
                   </div>
                 </div>
 
@@ -554,17 +552,14 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
             {isSelectedCourseLab ? (
               /* LAB / SESSIONAL COURSE: CUSTOMIZABLE ASSESSMENT DISTRIBUTION */
               <div className="space-y-4">
-                <div className="p-3.5 rounded-xl bg-amber-950/20 border border-amber-500/30 space-y-1.5">
+                <div className="p-4 rounded-2xl bg-amber-950/20 border border-amber-500/30 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                    <span className="text-sm font-bold text-amber-300 flex items-center gap-2">
                       <Sliders className="w-4 h-4 text-amber-400" />
                       Custom Lab Exam & Assessment Distribution
                     </span>
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-neutral-900 border border-neutral-700 text-amber-300">
-                      Total Max: {calculation.labTotalMax || 100} Marks
-                    </span>
                   </div>
-                  <p className="text-[11px] text-neutral-300 leading-relaxed">
+                  <p className="text-xs text-neutral-300 leading-relaxed">
                     Lab & sessional courses have different mark distributions (e.g. Lab reports, viva, performance, lab quizzes, project). Customize exam names, edit maximum marks, and enter your scores below:
                   </p>
                 </div>
@@ -583,7 +578,7 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                     return (
                       <div
                         key={item.id}
-                        className="p-3 rounded-xl bg-neutral-900/80 border border-neutral-800 space-y-2 hover:border-neutral-700 transition-colors"
+                        className="p-3.5 sm:p-4 rounded-2xl bg-neutral-900/80 border border-neutral-800 space-y-3 hover:border-neutral-700 transition-colors"
                       >
                         <div className="flex items-center justify-between gap-2">
                           <div className="flex-1">
@@ -592,14 +587,14 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                               value={item.name}
                               onChange={(e) => handleLabItemChange(item.id, 'name', e.target.value)}
                               placeholder={`Exam / Assessment #${idx + 1}`}
-                              className="w-full px-2.5 py-1 text-xs font-semibold text-neutral-200 bg-neutral-950 border border-neutral-700/80 rounded-lg focus:outline-none focus:border-amber-500"
+                              className="w-full px-3 py-1.5 text-xs sm:text-sm font-semibold text-neutral-200 bg-neutral-950 border border-neutral-700/80 rounded-xl focus:outline-none focus:border-amber-500"
                             />
                           </div>
 
-                          <div className="flex items-center gap-1 shrink-0">
+                          <div className="flex items-center gap-1.5 shrink-0">
                             {itemPct !== null && (
                               <span
-                                className={`text-[10px] font-mono px-2 py-0.5 rounded font-bold ${
+                                className={`text-[11px] font-mono px-2.5 py-1 rounded-lg font-bold ${
                                   itemPct >= 80
                                     ? 'bg-emerald-950/60 text-emerald-300 border border-emerald-800/60'
                                     : itemPct >= 40
@@ -613,7 +608,7 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                             <button
                               type="button"
                               onClick={() => handleRemoveLabItem(item.id)}
-                              className="p-1 rounded text-neutral-500 hover:text-rose-400 hover:bg-neutral-800 transition-colors"
+                              className="p-1.5 rounded-lg text-neutral-500 hover:text-rose-400 hover:bg-neutral-800 transition-colors"
                               title="Delete this exam component"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
@@ -623,7 +618,7 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
 
                         <div className="grid grid-cols-2 gap-3 items-center">
                           <div>
-                            <label className="block text-[10px] text-neutral-400 mb-1">
+                            <label className="block text-[11px] text-neutral-400 mb-1 font-medium">
                               Marks Obtained
                             </label>
                             <input
@@ -634,12 +629,12 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                               value={item.marksObtained ?? ''}
                               onChange={(e) => handleLabItemChange(item.id, 'marksObtained', e.target.value)}
                               placeholder="0"
-                              className="w-full py-1.5 px-2.5 rounded-lg bg-neutral-950 border border-neutral-700 text-xs text-neutral-100 font-mono text-center focus:outline-none focus:border-amber-500"
+                              className="w-full py-2 px-3 rounded-xl bg-neutral-950 border border-neutral-700 text-sm text-neutral-100 font-mono text-center focus:outline-none focus:border-amber-500"
                             />
                           </div>
 
                           <div>
-                            <label className="block text-[10px] text-neutral-400 mb-1">
+                            <label className="block text-[11px] text-neutral-400 mb-1 font-medium">
                               Max Marks (Out Of)
                             </label>
                             <input
@@ -650,7 +645,7 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                               value={item.maxMarks}
                               onChange={(e) => handleLabItemChange(item.id, 'maxMarks', e.target.value)}
                               placeholder="20"
-                              className="w-full py-1.5 px-2.5 rounded-lg bg-neutral-950 border border-neutral-700 text-xs text-amber-300 font-mono text-center focus:outline-none focus:border-amber-500"
+                              className="w-full py-2 px-3 rounded-xl bg-neutral-950 border border-neutral-700 text-sm text-amber-300 font-mono text-center focus:outline-none focus:border-amber-500"
                             />
                           </div>
                         </div>
@@ -682,23 +677,23 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
               </div>
             ) : (
               /* THEORY COURSE: STANDARD 4-COMPONENT SYSTEM */
-              <div className="space-y-4">
+              <div className="space-y-5">
                 {/* 1. Three Quizzes (Best 2 Counted) */}
-                <div className="space-y-2.5">
+                <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-semibold text-neutral-200">
                       1. Three Quizzes (Best 2 Counted)
                     </span>
-                    <span className="text-amber-400 font-mono text-[11px]">
+                    <span className="text-amber-400 font-mono text-[11px] font-semibold">
                       Counted: {calculation.bestTwoQuizTotal} / 20
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2.5">
+                  <div className="grid grid-cols-3 gap-3">
                     {/* Quiz 1 */}
-                    <div className="space-y-1.5 p-2.5 rounded-xl bg-neutral-900/60 border border-neutral-800">
+                    <div className="space-y-2 p-3 sm:p-3.5 rounded-2xl bg-neutral-900/60 border border-neutral-800">
                       <div className="flex items-center justify-between text-xs">
-                        <label className="text-neutral-400 font-medium">Quiz 1</label>
+                        <label className="text-neutral-300 font-medium">Quiz 1</label>
                         <span className="text-[10px] text-neutral-500 font-mono">/10</span>
                       </div>
                       <input
@@ -709,7 +704,7 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                         value={currentAssessment.quiz1 ?? ''}
                         onChange={(e) => handleInputChange('quiz1', e.target.value)}
                         placeholder="0 - 10"
-                        className="w-full text-center py-2 px-2 rounded-lg bg-neutral-950 border border-neutral-700 text-neutral-100 font-mono text-xs focus:outline-none focus:border-amber-500"
+                        className="w-full text-center py-2.5 px-2 rounded-xl bg-neutral-950 border border-neutral-700 text-neutral-100 font-mono text-sm focus:outline-none focus:border-amber-500 transition-colors"
                       />
                       <div className="text-center text-[10px]">
                         {calculation.sortedQuizzes.find((q) => q.index === 1)?.isTaken ? (
@@ -721,9 +716,9 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                     </div>
 
                     {/* Quiz 2 */}
-                    <div className="space-y-1.5 p-2.5 rounded-xl bg-neutral-900/60 border border-neutral-800">
+                    <div className="space-y-2 p-3 sm:p-3.5 rounded-2xl bg-neutral-900/60 border border-neutral-800">
                       <div className="flex items-center justify-between text-xs">
-                        <label className="text-neutral-400 font-medium">Quiz 2</label>
+                        <label className="text-neutral-300 font-medium">Quiz 2</label>
                         <span className="text-[10px] text-neutral-500 font-mono">/10</span>
                       </div>
                       <input
@@ -734,7 +729,7 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                         value={currentAssessment.quiz2 ?? ''}
                         onChange={(e) => handleInputChange('quiz2', e.target.value)}
                         placeholder="0 - 10"
-                        className="w-full text-center py-2 px-2 rounded-lg bg-neutral-950 border border-neutral-700 text-neutral-100 font-mono text-xs focus:outline-none focus:border-amber-500"
+                        className="w-full text-center py-2.5 px-2 rounded-xl bg-neutral-950 border border-neutral-700 text-neutral-100 font-mono text-sm focus:outline-none focus:border-amber-500 transition-colors"
                       />
                       <div className="text-center text-[10px]">
                         {calculation.sortedQuizzes.find((q) => q.index === 2)?.isTaken ? (
@@ -746,9 +741,9 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                     </div>
 
                     {/* Quiz 3 */}
-                    <div className="space-y-1.5 p-2.5 rounded-xl bg-neutral-900/60 border border-neutral-800">
+                    <div className="space-y-2 p-3 sm:p-3.5 rounded-2xl bg-neutral-900/60 border border-neutral-800">
                       <div className="flex items-center justify-between text-xs">
-                        <label className="text-neutral-400 font-medium">Quiz 3</label>
+                        <label className="text-neutral-300 font-medium">Quiz 3</label>
                         <span className="text-[10px] text-neutral-500 font-mono">/10</span>
                       </div>
                       <input
@@ -759,7 +754,7 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                         value={currentAssessment.quiz3 ?? ''}
                         onChange={(e) => handleInputChange('quiz3', e.target.value)}
                         placeholder="0 - 10"
-                        className="w-full text-center py-2 px-2 rounded-lg bg-neutral-950 border border-neutral-700 text-neutral-100 font-mono text-xs focus:outline-none focus:border-amber-500"
+                        className="w-full text-center py-2.5 px-2 rounded-xl bg-neutral-950 border border-neutral-700 text-neutral-100 font-mono text-sm focus:outline-none focus:border-amber-500 transition-colors"
                       />
                       <div className="text-center text-[10px]">
                         {calculation.sortedQuizzes.find((q) => q.index === 3)?.isTaken ? (
@@ -773,7 +768,7 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                 </div>
 
                 {/* 2. Midterm Examination */}
-                <div className="space-y-1.5 pt-2 border-t border-neutral-800">
+                <div className="space-y-2 pt-3 border-t border-neutral-800">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-semibold text-neutral-200">
                       2. Midterm Examination
@@ -783,7 +778,7 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     <input
                       type="number"
                       min={0}
@@ -792,14 +787,14 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                       value={currentAssessment.midterm ?? ''}
                       onChange={(e) => handleInputChange('midterm', e.target.value)}
                       placeholder="Enter midterm score (0 - 20)"
-                      className="w-full py-2 px-3 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-100 font-mono text-xs focus:outline-none focus:border-amber-500"
+                      className="w-full py-2.5 sm:py-3 px-3.5 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-100 font-mono text-sm focus:outline-none focus:border-amber-500 transition-colors"
                     />
-                    <span className="text-xs text-neutral-400 font-mono shrink-0">/ 20</span>
+                    <span className="text-sm text-neutral-400 font-mono font-semibold shrink-0">/ 20</span>
                   </div>
                 </div>
 
                 {/* 3. Miscellaneous */}
-                <div className="space-y-1.5 pt-2 border-t border-neutral-800">
+                <div className="space-y-2 pt-3 border-t border-neutral-800">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-semibold text-neutral-200">
                       3. Miscellaneous (Attendance, Performance, Assignments)
@@ -809,7 +804,7 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     <input
                       type="number"
                       min={0}
@@ -818,14 +813,14 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                       value={currentAssessment.misc ?? ''}
                       onChange={(e) => handleInputChange('misc', e.target.value)}
                       placeholder="Enter misc / attendance / assignment score (0 - 10)"
-                      className="w-full py-2 px-3 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-100 font-mono text-xs focus:outline-none focus:border-amber-500"
+                      className="w-full py-2.5 sm:py-3 px-3.5 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-100 font-mono text-sm focus:outline-none focus:border-amber-500 transition-colors"
                     />
-                    <span className="text-xs text-neutral-400 font-mono shrink-0">/ 10</span>
+                    <span className="text-sm text-neutral-400 font-mono font-semibold shrink-0">/ 10</span>
                   </div>
                 </div>
 
                 {/* 4. Final Examination */}
-                <div className="space-y-1.5 pt-2 border-t border-neutral-800">
+                <div className="space-y-2 pt-3 border-t border-neutral-800">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-semibold text-neutral-200">
                       4. Final Examination
@@ -835,7 +830,7 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                     </span>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     <input
                       type="number"
                       min={0}
@@ -844,9 +839,9 @@ export const BarForecaster: React.FC<BarForecasterProps> = ({
                       value={currentAssessment.finalExam ?? currentAssessment.finalExamScore ?? ''}
                       onChange={(e) => handleInputChange('finalExam', e.target.value)}
                       placeholder="Enter final exam score (0 - 50)"
-                      className="w-full py-2 px-3 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-100 font-mono text-xs focus:outline-none focus:border-amber-500"
+                      className="w-full py-2.5 sm:py-3 px-3.5 rounded-xl bg-neutral-900 border border-neutral-700 text-neutral-100 font-mono text-sm focus:outline-none focus:border-amber-500 transition-colors"
                     />
-                    <span className="text-xs text-neutral-400 font-mono shrink-0">/ 50</span>
+                    <span className="text-sm text-neutral-400 font-mono font-semibold shrink-0">/ 50</span>
                   </div>
                 </div>
               </div>

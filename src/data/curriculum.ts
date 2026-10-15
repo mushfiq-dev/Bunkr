@@ -764,6 +764,12 @@ export const isCourseSessional = (courseCode: string): boolean => {
   return false;
 };
 
+// Get title/name for any course
+export const getCourseTitle = (courseCode: string): string => {
+  const norm = courseCode.trim().toUpperCase();
+  return COURSE_INFO_MAP[norm]?.title || '';
+};
+
 // Default customizable assessment breakdown for lab/sessional courses (sum = 100)
 export const DEFAULT_LAB_ASSESSMENT_ITEMS: LabAssessmentItem[] = [
   { id: 'lab_1', name: 'Lab Performance & Attendance', marksObtained: null, maxMarks: 10 },

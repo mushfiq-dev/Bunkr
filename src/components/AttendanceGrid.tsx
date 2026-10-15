@@ -3,10 +3,7 @@ import {
   TrendingUp,
   AlertTriangle,
   ShieldCheck,
-  Filter,
   CheckCircle2,
-  Lock,
-  Unlock,
   Archive,
   Clock,
   Sparkles,
@@ -15,7 +12,6 @@ import {
   RoutineConfig,
   CalendarDayInfo,
   AttendanceRecord,
-  AttendanceStatus,
   DAY_SHORT_NAMES,
 } from '../types';
 import {
@@ -23,13 +19,12 @@ import {
   calculateCourseAttendanceSummary,
   formatDateToKey,
 } from '../services/academicMath';
-import { useTouchGuard } from '../hooks/useTouchGuard';
 
 interface AttendanceGridProps {
   config: RoutineConfig;
   calendarDays: CalendarDayInfo[];
   attendanceRecords: Record<string, AttendanceRecord>;
-  onToggleAttendance: (date: string, courseCode: string) => void;
+  onToggleAttendance?: (date: string, courseCode: string) => void;
   onSelectDateDetails?: (day: CalendarDayInfo) => void;
 }
 
@@ -37,14 +32,7 @@ export const AttendanceGrid: React.FC<AttendanceGridProps> = ({
   config,
   calendarDays,
   attendanceRecords,
-  onToggleAttendance,
 }) => {
-  const [selectedCourseFilter, setSelectedCourseFilter] = useState<string>('ALL');
-  const [selectedWeekFilter, setSelectedWeekFilter] = useState<number | 'ALL'>('ALL');
-  // Track which completed weeks are explicitly unlocked by the user to prevent accidental misclicks
-  const [unlockedCompletedWeeks, setUnlockedCompletedWeeks] = useState<Record<number, boolean>>({});
-
-  const { touchProps, guardClick } = useTouchGuard();
 
   const uniqueCourses = getUniqueCourses(config.weeklySchedule);
   const todayKey = formatDateToKey(new Date());
@@ -55,15 +43,6 @@ export const AttendanceGrid: React.FC<AttendanceGridProps> = ({
       calculateCourseAttendanceSummary(c, config, calendarDays, attendanceRecords)
     );
   }, [uniqueCourses, config, calendarDays, attendanceRecords]);
-
-  // Next attendance state cycling helper
-  const getNextStatusLabel = (current: AttendanceStatus): string => {
-    switch (current) {
-      case 'unmarked': return 'Attended';
-      case 'attended': return 'Skipped';
-      case 'skipped': return 'Blank';
-    }
-  };
 
   // Group all calendar days by week
   const allWeeksMap = useMemo(() => {
@@ -124,46 +103,31 @@ export const AttendanceGrid: React.FC<AttendanceGridProps> = ({
     };
   }, [allWeekNumbers, allWeeksMap, attendanceRecords]);
 
-  // Final sorted list of week numbers based on user selection or auto-reorder rule
+  // Sorted list of week numbers based on auto-reorder rule: incomplete on top, completed at bottom
   const displayWeekGroups = useMemo(() => {
-    if (selectedWeekFilter !== 'ALL') {
-      return {
-        active: [selectedWeekFilter],
-        completed: [] as number[],
-      };
-    }
-
     return {
       active: incompleteWeekNumbers,
       completed: completedWeekNumbers,
     };
-  }, [selectedWeekFilter, incompleteWeekNumbers, completedWeekNumbers]);
-
-  const toggleUnlockWeek = (weekNum: number) => {
-    setUnlockedCompletedWeeks((prev) => ({
-      ...prev,
-      [weekNum]: !prev[weekNum],
-    }));
-  };
+  }, [incompleteWeekNumbers, completedWeekNumbers]);
 
   // Render a single week's matrix row
   const renderWeekCard = (weekNum: number, isCompleted: boolean) => {
     const daysInWeek = allWeeksMap.get(weekNum) || [];
     const { totalClasses, loggedClasses } = getWeekLoggingStatus(weekNum);
-    const isUnlocked = !!unlockedCompletedWeeks[weekNum];
 
     return (
       <div
         key={weekNum}
-        className={`p-6 sm:p-8 rounded-3xl border transition-all space-y-6 shadow-xl ${
+        className={`p-5 sm:p-7 rounded-3xl border transition-all space-y-5 shadow-xl ${
           isCompleted
             ? 'bg-[#14151B]/90 border-emerald-950/60 hover:border-emerald-900/70'
             : 'bg-[#161720] border-neutral-800 hover:border-neutral-700/80'
         }`}
       >
         {/* Week Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-neutral-800/80">
-          <div className="flex items-center gap-3.5 flex-wrap">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 pb-4 border-b border-neutral-800/80">
+          <div className="flex items-center gap-3 flex-wrap">
             <span
               className={`text-sm sm:text-base font-bold font-mono px-3.5 py-1.5 rounded-xl tracking-wider shadow-sm ${
                 isCompleted
@@ -175,9 +139,9 @@ export const AttendanceGrid: React.FC<AttendanceGridProps> = ({
             </span>
 
             {isCompleted ? (
-              <span className="flex items-center gap-2 text-xs text-emerald-400 font-medium bg-emerald-950/40 px-3.5 py-1.5 rounded-xl border border-emerald-800/50">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>All Classes Logged · Moved to Bottom</span>
+              <span className="flex items-center gap-1.5 text-xs text-emerald-400 font-medium bg-emerald-950/40 px-3 py-1 rounded-xl border border-emerald-800/50">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                <span>All Classes Logged</span>
               </span>
             ) : (
               <span className="text-xs sm:text-sm text-neutral-400 font-medium font-mono">
@@ -186,10 +150,10 @@ export const AttendanceGrid: React.FC<AttendanceGridProps> = ({
             )}
           </div>
 
-          <div className="flex items-center gap-3.5 text-xs font-mono">
+          <div className="flex items-center gap-3 text-xs font-mono">
             {/* Progress Bar for Week */}
-            <div className="hidden md:flex items-center gap-2.5">
-              <div className="w-32 h-2.5 rounded-full bg-neutral-800 overflow-hidden">
+            <div className="flex items-center gap-2">
+              <div className="w-24 sm:w-32 h-2 sm:h-2.5 rounded-full bg-neutral-800 overflow-hidden">
                 <div
                   className={`h-full transition-all duration-300 ${
                     isCompleted ? 'bg-emerald-500' : 'bg-amber-500'
@@ -203,43 +167,12 @@ export const AttendanceGrid: React.FC<AttendanceGridProps> = ({
                 {totalClasses > 0 ? Math.round((loggedClasses / totalClasses) * 100) : 0}%
               </span>
             </div>
-
-            {/* Safety lock toggle for completed weeks to prevent accidental misclicks */}
-            {isCompleted && (
-              <button
-                type="button"
-                onClick={() => toggleUnlockWeek(weekNum)}
-                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl border text-xs font-sans font-medium transition-colors cursor-pointer ${
-                  isUnlocked
-                    ? 'bg-amber-500/15 border-amber-500/40 text-amber-300 hover:bg-amber-500/25'
-                    : 'bg-neutral-800/80 border-neutral-700/80 text-neutral-300 hover:text-white hover:bg-neutral-700'
-                }`}
-                title={isUnlocked ? 'Lock week to prevent misclicks' : 'Unlock week to edit past records'}
-              >
-                {isUnlocked ? (
-                  <>
-                    <Unlock className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Unlocked (Editing Active)</span>
-                  </>
-                ) : (
-                  <>
-                    <Lock className="w-3.5 h-3.5 text-neutral-400" />
-                    <span>Locked (No Misclicks)</span>
-                  </>
-                )}
-              </button>
-            )}
           </div>
         </div>
 
         {/* 7 Days in Week Row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3.5 sm:gap-4">
           {daysInWeek.map((day) => {
-            const displayedCourses =
-              selectedCourseFilter === 'ALL'
-                ? day.courses
-                : day.courses.filter((c) => c === selectedCourseFilter);
-
             const isToday = day.date === todayKey;
             const hasHoliday = !!day.holiday;
 
@@ -289,64 +222,38 @@ export const AttendanceGrid: React.FC<AttendanceGridProps> = ({
                   )}
                 </div>
 
-                {/* Interactive Clickable Course Boxes */}
+                {/* Read-Only Course Status Badges (Schedule and Attendance Display) */}
                 <div className="space-y-2 pt-2">
-                  {displayedCourses.length === 0 && day.courses.length > 0 && (
-                    <div className="text-xs text-neutral-500 italic py-1">
-                      Filtered out
-                    </div>
-                  )}
-
-                  {displayedCourses.length === 0 && day.courses.length === 0 && !hasHoliday && !day.isWeekend && (
+                  {day.courses.length === 0 && !hasHoliday && !day.isWeekend && (
                     <div className="text-xs text-neutral-600 py-1">
                       No classes
                     </div>
                   )}
 
-                  {displayedCourses.map((course) => {
+                  {day.courses.map((course) => {
                     const recordKey = `${day.date}_${course}`;
                     const status = attendanceRecords[recordKey]?.status || 'unmarked';
-                    // If week is completed and currently locked, clicking is disabled to prevent misclicks
-                    const isClickDisabled = isCompleted && !isUnlocked;
 
                     return (
-                      <button
+                      <div
                         key={course}
-                        type="button"
-                        disabled={isClickDisabled}
-                        {...touchProps}
-                        onClick={
-                          isClickDisabled
-                            ? undefined
-                            : guardClick(() => onToggleAttendance(day.date, course))
-                        }
-                        className={`w-full py-2 px-2.5 sm:py-2.5 sm:px-3 rounded-xl flex items-center justify-between text-left font-mono text-xs sm:text-sm font-semibold transition-all select-none touch-manipulation ${
-                          isClickDisabled
-                            ? status === 'attended'
-                              ? 'bg-emerald-700/80 text-white cursor-default opacity-90'
-                              : status === 'skipped'
-                              ? 'bg-rose-700/80 text-white cursor-default opacity-90'
-                              : 'bg-neutral-800 text-neutral-400 cursor-default opacity-75'
-                            : status === 'attended'
-                            ? 'bg-emerald-600 text-white shadow-md hover:bg-emerald-500 active:scale-[0.98] cursor-pointer'
+                        className={`w-full py-2.5 px-3 sm:py-3 sm:px-3.5 rounded-xl flex items-center justify-between font-mono text-xs sm:text-sm font-semibold transition-all select-none shadow-sm ${
+                          status === 'attended'
+                            ? 'bg-emerald-950/70 border border-emerald-500/70 text-emerald-100'
                             : status === 'skipped'
-                            ? 'bg-rose-600 text-white shadow-md hover:bg-rose-500 active:scale-[0.98] cursor-pointer'
-                            : 'bg-neutral-800/90 text-neutral-200 hover:bg-neutral-700 active:scale-[0.98] border border-neutral-700/80 cursor-pointer'
+                            ? 'bg-rose-950/70 border border-rose-500/70 text-rose-100'
+                            : 'bg-neutral-800/80 border border-neutral-700/80 text-neutral-300'
                         }`}
-                        title={
-                          isClickDisabled
-                            ? `${course} — Locked (click 'Unlock' on Week ${weekNum} header to edit)`
-                            : `${course} on ${day.date} — Currently: ${status}. Tap to switch to ${getNextStatusLabel(status)}`
-                        }
+                        title={`${course} on ${day.date} — Status: ${status}. Modify attendance via Today's Fast-Log or the Calendar tab.`}
                       >
-                        <span className="break-words text-wrap leading-tight text-center">{course}</span>
+                        <span className="break-words text-wrap leading-tight">{course}</span>
                         
-                        <span className="text-xs sm:text-sm font-bold shrink-0 ml-1.5">
-                          {status === 'attended' && '✓'}
-                          {status === 'skipped' && '✕'}
-                          {status === 'unmarked' && '·'}
+                        <span className="text-xs sm:text-sm font-bold shrink-0 ml-2 flex items-center gap-1.5">
+                          {status === 'attended' && <span className="text-emerald-400 font-bold">✓</span>}
+                          {status === 'skipped' && <span className="text-rose-400 font-bold">✕</span>}
+                          {status === 'unmarked' && <span className="text-neutral-500 text-base leading-none">·</span>}
                         </span>
-                      </button>
+                      </div>
                     );
                   })}
                 </div>
@@ -514,62 +421,7 @@ export const AttendanceGrid: React.FC<AttendanceGridProps> = ({
         </div>
       </div>
 
-      {/* 2. Controls Bar: Spacious Filters & Interactive Legend */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 p-5 sm:p-6 rounded-3xl bg-[#161720] border border-neutral-800 shadow-md">
-        {/* Course Filter Tabs */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
-          <span className="text-xs sm:text-sm text-neutral-400 mr-1 flex items-center gap-2 shrink-0 font-medium">
-            <Filter className="w-4 h-4 text-amber-400" />
-            <span>Course:</span>
-          </span>
-
-          <button
-            onClick={() => setSelectedCourseFilter('ALL')}
-            className={`px-4 py-2 text-xs sm:text-sm rounded-xl font-medium transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-              selectedCourseFilter === 'ALL'
-                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold shadow-sm'
-                : 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-850 border border-transparent'
-            }`}
-          >
-            All Courses
-          </button>
-
-          {uniqueCourses.map((c) => (
-            <button
-              key={c}
-              onClick={() => setSelectedCourseFilter(c)}
-              className={`px-4 py-2 text-xs sm:text-sm font-mono rounded-xl transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
-                selectedCourseFilter === c
-                  ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 font-semibold shadow-sm'
-                  : 'text-neutral-400 hover:text-neutral-200 hover:bg-neutral-850 border border-transparent'
-              }`}
-            >
-              {c}
-            </button>
-          ))}
-        </div>
-
-        {/* Interactive State Legend */}
-        <div className="flex items-center gap-3.5 sm:gap-5 text-xs sm:text-sm text-neutral-400 shrink-0 font-medium">
-          <span className="text-neutral-500 font-mono text-xs">Tap Box:</span>
-          <span className="flex items-center gap-1.5">
-            <span className="w-4 h-4 rounded-md bg-neutral-750 border border-neutral-600 inline-block shadow-inner" />
-            <span>Blank</span>
-          </span>
-          <span className="text-neutral-600">➔</span>
-          <span className="flex items-center gap-1.5 text-emerald-400 font-semibold">
-            <span className="w-4 h-4 rounded-md bg-emerald-500 text-neutral-950 flex items-center justify-center font-bold text-[10px] shadow-sm">✓</span>
-            <span>Attended</span>
-          </span>
-          <span className="text-neutral-600">➔</span>
-          <span className="flex items-center gap-1.5 text-rose-400 font-semibold">
-            <span className="w-4 h-4 rounded-md bg-rose-500 text-white flex items-center justify-center font-bold text-[10px] shadow-sm">✕</span>
-            <span>Skipped</span>
-          </span>
-        </div>
-      </div>
-
-      {/* 3. The 14-Week Attendance Matrix */}
+      {/* 2. The 14-Week Attendance Matrix */}
       <div className="space-y-8">
         
         {/* Section A: Active / Incomplete Weeks (Right at the top so no scrolling needed!) */}

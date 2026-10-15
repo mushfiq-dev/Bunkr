@@ -1,87 +1,107 @@
-# Ambient Amber Illumination & Precision Logo Light Beam
+# Mobile & Desktop UI Decongestion & Workflow Streamlining
 
-A refined aesthetic upgrade that envelops the app in a deep, subtle amber gradient reacting smoothly to scroll depth, while framing the Bunkr logo and name with a smooth, ultra-thin glowing amber light beam tracing around its contour.
+Streamline the attendance and academic forecasting views by removing redundant badges, eliminating horizontal slider bottlenecks, centralizing attendance logging exclusively to Today's Daily Fast-Log and the Calendar, and giving cards breathing room to resolve interface congestion.
 
----
-
-## User Review & Critical Decisions
+### User Review & Critical Decisions
 
 > [!IMPORTANT]
-> The design preferences confirmed in Phase 1 have been directly integrated:
-> - **Ambient Background Glow**: Deep, cohesive amber gradient that smoothly shifts in luminosity as the user scrolls, creating warmth across empty gutters and wide displays without harsh orb artifacts.
-> - **Logo Border Glow**: Replaces the previous spinning conic block with a high-end, smooth, ultra-thin glowing amber light beam that continuously traces the rounded contour of the Bunkr logo and name.
-
-- **Confirmed Decision 1**: Smooth scroll-linked gradient opacity and luminosity transform using Framer Motion's `useScroll` and `useTransform` tied to the scroll container.
-- **Confirmed Decision 2**: Precision SVG or border-tracing light beam around the logo badge container with a focused amber glow filter and smooth perpetual loop.
+> The following design decisions were confirmed via interactive clarification:
+> - **Cross-Platform Scope**: Layout simplifications and congestion fixes will apply across both mobile and desktop views to maintain consistent ergonomics and visual clarity.
+> - **Bar Forecaster Course Layout**: The horizontal slider pills are replaced with a vertical stack of spacious, full-width course cards with high-contrast active states.
+> - **Read-Only Weekly Class Cards**: Weekly schedule cards in the Attendance tab will serve purely as clean visual status badges showing schedule and attendance history; attendance changes can only be logged via Today's Daily Fast-Log or the Calendar tab.
 
 ---
 
-## 1. Overview & Core Concept
+### 1. Overview & Core Concept
 
-- **What It Delivers**: Transforms the backdrop from a flat, stark dark slate into an atmospheric studio aesthetic with warm amber undertones that breathe and brighten as the user explores the semester tracker. Elevates the central brand mark (`Bunkr`) with a refined, jewel-like light beam tracing its perimeter.
-- **Target Audience / Mood**: AUST CSE students using Bunkr daily for attendance tracking and GPA forecasting—delivering a calm, focused, developer-grade cyber-editorial atmosphere.
-- **Key Value**: Eliminates the "bland empty space" on wide laptop and desktop monitors while ensuring zero visual noise or distraction during routine academic logging.
-
----
-
-## 2. User Experience & Visual Design
-
-### Ambient Background Glow Flow
-- **At Rest (Top of Page)**: The background displays a deep, soft amber radial vignette centered behind the header and top cards (`rgba(245, 158, 11, 0.04)` to `rgba(217, 119, 6, 0.02)`), gently illuminating wide screen gutters.
-- **During Scroll**: As the user scrolls through the 14-week attendance grid or course cards, the ambient warmth smoothly intensifies to `rgba(245, 158, 11, 0.075)` and shifts spatial center, dynamically responding to scroll speed and direction without lag.
-- **Gutter Comfort**: The left and right empty spaces on widescreen viewports feel unified and intentional, eliminating dead black emptiness.
-
-### Precision Logo Light Beam
-- **Contour Tracing**: The logo badge container maintains a clean, dark surface (`#121316`) framed by a subtle border (`border-neutral-800`).
-- **Circulating Beam**: An ultra-thin, bright amber light ray (`#F59E0B` with `drop-shadow` diffusion) continuously glides around the rounded rectangular perimeter of the logo badge.
-- **Interactive State**: On hover, the beam brightens slightly and the logo scales subtly (`scale-[1.01]`), reinforcing its role as the home navigation trigger without jarring visual spikes.
+- **The Problem**: User feedback revealed that the mobile experience felt cramped and congested. Having attendance toggle affordances on every weekly box led to accidental taps and visual clutter. In addition, horizontal scrolling sliders in Bar Forecaster and redundant metadata badges (`Sem 2.1`, `Grading Scale`, course credits, `Total Max: 100 Marks`) crowded out essential inputs.
+- **The Solution**: 
+  1. Make Today's Daily Fast-Log the dedicated focal point for recording today's classes, removing the day switcher pills and the "14-Wk Grid" button.
+  2. Transform weekly schedule cards in the Attendance tab into read-only status badges so users can easily see their full semester timeline without accidental logs.
+  3. Remove the course filter tabs and tap-box legend strip above the weekly cards.
+  4. Redesign course selection in Bar Forecaster into a vertical list of full-width cards with ample spacing.
+  5. Clean up redundant badges (`Sem 2.1`, `Grading Scale`, `· X Credits`, and `Total Max: 100 Marks`).
 
 ---
 
-## 3. Key Product Decisions & Trade-Offs
+### 2. User Experience & Visual Design
 
-- **Decision 1: Full-Viewport Mesh Gradient vs. Floating Circle Orbs**
-  - *Chosen Approach*: Continuous radial mesh gradient background with CSS `radial-gradient` modulated via Framer Motion transform on scroll.
-  - *Why*: Floating colored circles produce visible clipping edges, banding, and jarring contrasts on varying screen aspect ratios. A smooth radial mesh gradient creates an organic glow that naturally envelopes the viewport.
-  - *Alternatives Considered*: Multiple blurred divs moving at different speeds (discarded because it creates an uneven, distracting patchwork).
+#### A. Daily Attendance Fast-Log (`DailyAttendanceBanner.tsx`)
+- **Focused on Today**: The top header clearly displays "Today's Attendance Fast-Log" with the formatted device date.
+- **Removed Elements**: 
+  - The `14-Wk Grid →` link button is removed.
+  - The multi-day routine selector (`Sat`, `Sun`, `Mon`, `Tue`, `Wed`, `Thu`, `Fri`) is removed; the fast log directly displays today's scheduled classes.
+- **Logging Flow**: Users tap class buttons for today directly to cycle `Blank` → `Attended (✓)` → `Skipped (✕)`. To edit past or future days, a clear prompt directs them to the **Calendar** tab.
 
-- **Decision 2: SVG Path Light Beam vs. Infinite Conic Gradient Mask**
-  - *Chosen Approach*: Precision path / border ray with masked linear gradient or SVG perimeter animation that restricts the light strictly to a razor-thin border track.
-  - *Why*: Eliminates the previous bulky spinning fan effect, producing a sleek, bespoke hairline glow that looks intentional and executive.
+#### B. Attendance 14-Week Schedule Grid (`AttendanceGrid.tsx`)
+- **Clean Read-Only Status Badges**: Class pills inside week cards are rendered as clean, non-interactive status badges (no click handlers, no cursor-pointer, no accidental taps). They clearly show the course name and current status (`✓`, `✕`, `·`).
+- **Removed Filter & Legend Section**: The filter bar ("Course: All Courses...") and the interactive "Tap Box: Blank ➔ Attended ➔ Skipped" legend row are removed, eliminating visual noise.
+- **Decongested Spacing**: Week cards receive generous padding (`p-5 sm:p-6`) and comfortable vertical gaps (`gap-4`) between days and weeks.
+
+#### C. Bar Forecaster (`BarForecaster.tsx`)
+- **Header Clean-up**: 
+  - Removed the yellow `Sem 2.1` badge.
+  - Removed the `Grading Scale` toggle button.
+- **Vertical Course Selection List**:
+  - Theory and Lab courses are listed vertically as individual full-width cards rather than horizontal scroll strips.
+  - Each course card displays the course code, course title, and an indicator badge showing whether marks have been entered, with an active border highlight when selected.
+- **Assessment Marks Input**:
+  - Removed `· X Credits` next to the course name in the input header.
+  - Removed the `Total Max: 100 Marks` badge from the Custom Lab Exam distribution header.
+  - Increased input field padding and gap sizing to prevent cramped mobile input.
 
 ---
 
-## 4. Technical Architecture & System Layout
+### 3. Key Product Decisions & Trade-Offs
+
+- **Decision 1: Centralizing Attendance Modifications to Today Fast-Log & Calendar**
+  - *Chosen Approach*: The Attendance tab's weekly cards become read-only schedule viewers. Users modify attendance for today in the Daily Fast-Log banner and for any past/future date in the Calendar tab.
+  - *Why*: Eliminates accidental tap modifications on mobile while scrolling through weeks, and establishes a single intuitive paradigm: fast-log for today, calendar for historical changes.
+- **Decision 2: Vertical Course Cards over Horizontal Slider in Bar Forecaster**
+  - *Chosen Approach*: Expand courses into a clean vertical list of cards with ample tap targets.
+  - *Why*: Horizontal sliders on mobile require awkward horizontal thumb swiping and often hide courses off-screen. Vertical stacking flows naturally with mobile scrolling.
+- **Decision 3: Removing Redundant Metadata Badges**
+  - *Chosen Approach*: Strip out `Sem 2.1`, `Grading Scale` button, `· Credits`, and `Total Max: 100 Marks`.
+  - *Why*: These elements added cognitive noise without functional value. The current semester is already established in onboarding/profile, grading math runs automatically, and credits are already factored into weighted CGPA calculations.
+
+---
+
+### 4. Technical Architecture & Data Strategy (Technical Reference)
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                      App.tsx Root Viewport                      │
-├─────────────────────────────────────────────────────────────────┤
-│  [Ambient Scroll-Linked Mesh Gradient Layer] (fixed, z-0)       │
-│  - useScroll() + useTransform() opacity & radial position       │
-│  - Deep amber tones (#F59E0B / #D97706 at 3% - 8% alpha)        │
-├─────────────────────────────────────────────────────────────────┤
-│  [Navbar Component] (sticky top-0, z-40)                        │
-│  ┌───────────────────────────────────────────────────────────┐  │
-│  │ Logo Button Container (relative, rounded-2xl)             │  │
-│  │ ┌───────────────────────────────────────────────────────┐ │  │
-│  │ │ Smooth Circulating Amber Light Beam Ray (SVG/Path)   │ │  │
-│  │ │ BunkrLogo (Emblem + Bunkr Wordmark)                  │ │  │
-│  │ └───────────────────────────────────────────────────────┘ │  │
-│  └───────────────────────────────────────────────────────────┘  │
-├─────────────────────────────────────────────────────────────────┤
-│  [Main Layout Container] (relative z-10)                        │
-│  - Attendance Grid & 70% Skip Math KPI Cards                    │
-│  - Academic Semester Banner & Routine Timetable                 │
-│  - Calendar View & Forecaster Views                             │
-│  - Footer with Social Contact Links                             │
-└─────────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                       Top Navigation                        │
+│             [ Attendance ]  [ Calendar ]  [ Forecaster ]    │
+└──────────────┬──────────────────────┬───────────────────────┘
+               │                      │
+       ATTENDANCE TAB           CALENDAR TAB         FORECASTER TAB
+               │                      │                      │
+  ┌────────────┴────────────┐         │          ┌───────────┴───────────┐
+  │ Today's Daily Fast-Log  │         │          │ Header (Cleaned)      │
+  │ • Today's classes ONLY  │         │          │ • No Sem / Grade scale│
+  │ • Live interactive logs │         │          └───────────┬───────────┘
+  └────────────┬────────────┘         │                      │
+               │                      │          ┌───────────┴───────────┐
+  ┌────────────┴────────────┐         │          │ Vertical Course Cards │
+  │ 14-Week Schedule        │         │          │ • Full-width cards    │
+  │ • Read-Only Badges      │         │          │ • Theory & Lab lists  │
+  │ • No click-logging      │         │          └───────────┬───────────┘
+  │ • No filter/legend strip│         │                      │
+  └─────────────────────────┘         │          ┌───────────┴───────────┐
+                                      │          │ Marks Input (Cleaned) │
+                         Full Date Attendance    │ • No Credits / Max 100│
+                         Log & Historic Edit     │ • Pass Bar Highlight  │
+                                                 └───────────────────────┘
 ```
 
-### Planned File Adjustments
-1. **`src/App.tsx`**:
-   - Reconfigure background layer to use a unified scroll-responsive amber gradient atmosphere that smoothly interpolates opacity and glow radius across the scroll range.
-2. **`src/components/Navbar.tsx`**:
-   - Replace the previous conic rotation block with a dedicated hairline light-beam container framing the `BunkrLogo`.
-3. **`src/index.css`**:
-   - Add specialized keyframes/utility for border-beam movement if required, guaranteeing butter-smooth 60fps GPU acceleration.
+#### Component & Props Updates:
+1. `src/components/DailyAttendanceBanner.tsx`:
+   - Remove `onOpenAttendanceTab` button and day tabs mapping (`DAYS_ORDER`).
+   - Fix `selectedDay` to `todayDayOfWeek`.
+2. `src/components/AttendanceGrid.tsx`:
+   - Remove the `selectedCourseFilter` controls bar and Tap Box legend block.
+   - Render class items in week cards as non-interactive `div` elements (with status styling: emerald for attended, rose for skipped, neutral for blank) instead of clickable toggle buttons.
+3. `src/components/BarForecaster.tsx`:
+   - Remove `Sem {currentSemesterInfo.shortLabel}` badge and `Grading Scale` button.
+   - Replace `overflow-x-auto` course strips with a responsive vertical list (`space-y-2`) of spacious cards.
+   - Remove `{courseCredits} Credits` and `Total Max: {calculation.labTotalMax || 100} Marks` badges.
